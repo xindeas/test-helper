@@ -9,7 +9,7 @@ import org.springframework.data.domain.Page;
 import java.util.List;
 
 public interface UserService {
-    public PageHelperPo<UserDto, UserPo> query(PageHelperPo<UserDto, UserPo> page);
+    public PageHelperPo<User, UserPo> query(PageHelperPo<User, UserPo> page);
     public User load(Long id);
     public User save(User user);
     public User add(User user);

@@ -1,7 +1,5 @@
 package com.testhelper.demo.pojo;
 
-import com.testhelper.demo.config.ReflectAnno;
-import com.testhelper.demo.entity.QProject;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,15 +7,10 @@ import java.util.Date;
 
 @Getter
 @Setter
-public class UserPo {
+public class ProjectPo {
     private Long id;
-    private String login;
+    private Long belongsTo;
     private String name;
-    private String pwd;
-    private String mobile;
-    private String email;
-    private String avatar;
-    private String role;
     private Date createDate;
     private String createBy;
     private Date modifyDate;

@@ -18,7 +18,7 @@ public class UserComponent {
     @Autowired
     private UserService userService;
 
-    public ResultHelperPo query(PageHelperPo<UserDto, UserPo> page) {
+    public ResultHelperPo query(PageHelperPo<User, UserPo> page) {
         return new ResultHelperPo(true, userService.query(page), "");
     }
 

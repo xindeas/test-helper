@@ -3,7 +3,9 @@ package com.testhelper.demo.controller;
 import com.testhelper.demo.component.ProjectComponent;
 import com.testhelper.demo.entity.Project;
 import com.testhelper.demo.entity.User;
+import com.testhelper.demo.po.PageHelperPo;
 import com.testhelper.demo.po.ResultHelperPo;
+import com.testhelper.demo.pojo.ProjectPo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,6 +15,11 @@ import org.springframework.web.bind.annotation.*;
 public class ProjectController {
     @Autowired
     private ProjectComponent projectComponent;
+
+    @PostMapping("/query")
+    private ResultHelperPo query (@RequestBody PageHelperPo<Project, ProjectPo> page) {
+        return projectComponent.query(page);
+    }
 
     /**
      * 加载

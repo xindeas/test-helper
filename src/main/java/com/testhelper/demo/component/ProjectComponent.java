@@ -1,7 +1,9 @@
 package com.testhelper.demo.component;
 
 import com.testhelper.demo.entity.Project;
+import com.testhelper.demo.po.PageHelperPo;
 import com.testhelper.demo.po.ResultHelperPo;
+import com.testhelper.demo.pojo.ProjectPo;
 import com.testhelper.demo.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -10,6 +12,10 @@ import org.springframework.stereotype.Component;
 public class ProjectComponent {
     @Autowired
     private ProjectService projectService;
+
+    public ResultHelperPo query(PageHelperPo<Project, ProjectPo> page) {
+        return new ResultHelperPo(true, projectService.query(page), "");
+    }
 
     public ResultHelperPo load(Long id) {
         return new ResultHelperPo(true, projectService.load(id), "");

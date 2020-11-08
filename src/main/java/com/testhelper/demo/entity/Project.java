@@ -18,7 +18,7 @@ public class Project {
     @GenericGenerator(name = "idGenerator", strategy = "uuid")
     @Column(name="id")
     private Long id;
-    @Column(name="name")
+    @Column(name="name",length=50)
     private String name;
     @Column(name="belongs_to")
     private Long belongsTo;

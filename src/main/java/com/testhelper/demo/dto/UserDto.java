@@ -10,9 +10,4 @@ import java.io.Serializable;
 public class UserDto implements Serializable {
     private Long id;
     private String name;
-
-    public UserDto (Long id, String name) {
-        this.id = id;
-        this.name = name;
-    }
 }

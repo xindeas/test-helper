@@ -17,7 +17,7 @@ public class UserController {
     private UserComponent userComponent;
 
     @PostMapping("/query")
-    private ResultHelperPo query (@RequestBody PageHelperPo<UserDto, UserPo> page) {
+    private ResultHelperPo query (@RequestBody PageHelperPo<User, UserPo> page) {
         return userComponent.query(page);
     }
 
