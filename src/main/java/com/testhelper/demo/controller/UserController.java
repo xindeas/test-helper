@@ -16,6 +16,11 @@ public class UserController {
     @Autowired
     private UserComponent userComponent;
 
+    /**
+     * 分页查询
+     * @param page
+     * @return
+     */
     @PostMapping("/query")
     private ResultHelperPo query (@RequestBody PageHelperPo<User, UserPo> page) {
         return userComponent.query(page);

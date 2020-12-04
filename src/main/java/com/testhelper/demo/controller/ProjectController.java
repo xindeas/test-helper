@@ -16,6 +16,11 @@ public class ProjectController {
     @Autowired
     private ProjectComponent projectComponent;
 
+    /**
+     * 分页查询
+     * @param page
+     * @return
+     */
     @PostMapping("/query")
     private ResultHelperPo query (@RequestBody PageHelperPo<Project, ProjectPo> page) {
         return projectComponent.query(page);

@@ -48,7 +48,7 @@ public class UserComponent {
             return new ResultHelperPo(false, user, "账号或密码不正确");
         }
         if (StrUtils.nullToEmpty(encoded).equals(userData.getPwd())) {
-            return new ResultHelperPo(true, user, "登陆成功");
+            return new ResultHelperPo(true, userData, "登陆成功");
         }
         return new ResultHelperPo(false, user, "登陆失败");
     }
