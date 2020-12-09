@@ -5,6 +5,7 @@ import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.testhelper.demo.entity.Project;
 import com.testhelper.demo.entity.QProject;
+import com.testhelper.demo.entity.QProjectAuth;
 import com.testhelper.demo.entity.User;
 import com.testhelper.demo.po.PageHelperPo;
 import com.testhelper.demo.pojo.ProjectPo;
@@ -13,6 +14,8 @@ import com.testhelper.demo.service.ProjectService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class ProjectServiceImpl extends BaseServiceImpl<Project> implements ProjectService {
@@ -40,6 +43,26 @@ public class ProjectServiceImpl extends BaseServiceImpl<Project> implements Proj
             e.printStackTrace();
         }
         return this.paginationQuery(query, page);
+    }
+
+    @Override
+    public List<Project> queryForOptions(Long userId) {
+        if (null == userId) {
+            return null;
+        }
+        QProject qClass = QProject.project;
+        QProjectAuth qAuth = QProjectAuth.projectAuth;
+
+        JPAQuery<Project> query = queryFactory
+                .selectFrom(qClass)
+                .leftJoin(qAuth)
+                .on(qClass.id.eq(qAuth.projectId))
+                .where(
+                        qClass.belongsTo.eq(userId)
+                        .or(qAuth.userId.eq(userId))
+                        .and(qClass.enabled.eq(true))
+                );
+        return query.fetch();
     }
 
     @Override
@@ -73,6 +96,9 @@ public class ProjectServiceImpl extends BaseServiceImpl<Project> implements Proj
             }
             if (null != po.getBelongsTo()) {
                 builder.and(qClass.belongsTo.eq(po.getBelongsTo()));
+            }
+            if (null != po.getEnabled()) {
+                builder.and(qClass.enabled.eq(po.getEnabled()));
             }
             if (StringUtils.isNotBlank(po.getCreateBy())) {
                 builder.and(qClass.createBy.eq(po.getCreateBy()));

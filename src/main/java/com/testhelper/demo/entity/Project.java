@@ -22,6 +22,8 @@ public class Project {
     private String name;
     @Column(name="belongs_to")
     private Long belongsTo;
+    @Column(name="enabled")
+    private Boolean enabled;
     @Column(name="create_date")
     private Date createDate;
     @Column(name="create_by",length=50)

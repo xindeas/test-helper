@@ -11,6 +11,7 @@ public class ProjectPo {
     private Long id;
     private Long belongsTo;
     private String name;
+    private Boolean enabled;
     private Date createDate;
     private String createBy;
     private Date modifyDate;

@@ -4,8 +4,11 @@ import com.testhelper.demo.entity.Project;
 import com.testhelper.demo.po.PageHelperPo;
 import com.testhelper.demo.pojo.ProjectPo;
 
+import java.util.List;
+
 public interface ProjectService {
     public PageHelperPo<Project, ProjectPo> query(PageHelperPo<Project, ProjectPo> page);
+    public List<Project> queryForOptions(Long userId);
     public Project load(Long id);
     public Project save(Project project);
     public Project add(Project project);

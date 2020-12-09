@@ -17,6 +17,10 @@ public class ProjectComponent {
         return new ResultHelperPo(true, projectService.query(page), "");
     }
 
+    public ResultHelperPo queryForOptions(Long userId) {
+        return new ResultHelperPo(true, projectService.queryForOptions(userId), "");
+    }
+
     public ResultHelperPo load(Long id) {
         return new ResultHelperPo(true, projectService.load(id), "");
     }
@@ -35,5 +39,29 @@ public class ProjectComponent {
     public ResultHelperPo delete(Long id) {
         projectService.delete(id);
         return new ResultHelperPo(true, id, "");
+    }
+    public ResultHelperPo enable(Long id) {
+        Project project = projectService.load(id);
+        if (null == project) {
+            return new ResultHelperPo(false, null, "项目不存在");
+        }
+        if (project.getEnabled()) {
+            return new ResultHelperPo(false, null, project.getName() + "项目已启用无需再次启用");
+        }
+        project.setEnabled(true);
+
+        return new ResultHelperPo(true, projectService.save(project), "");
+    }
+    public ResultHelperPo disable(Long id) {
+        Project project = projectService.load(id);
+        if (null == project) {
+            return new ResultHelperPo(false, null, "项目不存在");
+        }
+        if (!project.getEnabled()) {
+            return new ResultHelperPo(false, null, project.getName() + "项目已禁用无需再次禁用");
+        }
+        project.setEnabled(false);
+
+        return new ResultHelperPo(true, projectService.save(project), "");
     }
 }

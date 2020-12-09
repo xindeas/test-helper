@@ -27,6 +27,15 @@ public class ProjectController {
     }
 
     /**
+     * 查询项目下拉框
+     * @return
+     */
+    @PostMapping("/queryForOptions")
+    private ResultHelperPo queryForOptions (Long userId) {
+        return projectComponent.queryForOptions(userId);
+    }
+
+    /**
      * 加载
      * @param id
      * @return
@@ -64,5 +73,25 @@ public class ProjectController {
     @DeleteMapping("/delete/{id}")
     private ResultHelperPo delete (@PathVariable("id") Long id) {
         return projectComponent.delete(id);
+    }
+
+    /**
+     * 启用
+     * @param id
+     * @return
+     */
+    @GetMapping("/enable/{id}")
+    private ResultHelperPo enable (@PathVariable("id") Long id) {
+        return projectComponent.enable(id);
+    }
+
+    /**
+     * 禁用
+     * @param id
+     * @return
+     */
+    @GetMapping("/disable/{id}")
+    private ResultHelperPo disable (@PathVariable("id") Long id) {
+        return projectComponent.disable(id);
     }
 }
