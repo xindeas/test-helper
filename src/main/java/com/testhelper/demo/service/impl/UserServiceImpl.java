@@ -116,6 +116,9 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
             if (null != po.getModifyDate()) {
                 builder.and(qClass.modifyDate.eq(po.getModifyDate()));
             }
+            if (null != po.getIdNotIn()) {
+                builder.and(qClass.id.notIn(po.getIdNotIn()));
+            }
         }
         return builder;
     }
