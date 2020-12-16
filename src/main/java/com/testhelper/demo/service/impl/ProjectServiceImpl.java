@@ -6,18 +6,22 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.testhelper.demo.entity.Project;
 import com.testhelper.demo.entity.QProject;
 import com.testhelper.demo.entity.QProjectAuth;
-import com.testhelper.demo.entity.User;
 import com.testhelper.demo.po.PageHelperPo;
 import com.testhelper.demo.pojo.ProjectPo;
 import com.testhelper.demo.repository.ProjectRepository;
 import com.testhelper.demo.service.ProjectService;
+import com.testhelper.demo.utils.EntityUtils;
+import com.testhelper.demo.utils.LogUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
+@Transactional
 public class ProjectServiceImpl extends BaseServiceImpl<Project> implements ProjectService {
     @Autowired
     private ProjectRepository projectRepository;
@@ -37,11 +41,7 @@ public class ProjectServiceImpl extends BaseServiceImpl<Project> implements Proj
         JPAQuery<Project> query = queryFactory
                 .selectFrom(qClass)
                 .where(builder);
-        try {
-            query = sortCreator(qClass, ProjectPo.class, query, page.getSorts());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        query = sortCreator(qClass, ProjectPo.class, query, page.getSorts());
         return this.paginationQuery(query, page);
     }
 
@@ -72,12 +72,27 @@ public class ProjectServiceImpl extends BaseServiceImpl<Project> implements Proj
 
     @Override
     public Project save(Project project) {
+        Project old = projectRepository.findProjectById(project.getId());
+
+        String msg = EntityUtils.compareEntity(old, project);
+        if (StringUtils.isNotBlank(msg)) {
+            LogUtils.log("tb_project", project.getId(), msg, "admin");
+        }
+        project.setModifyBy("admin");
+        project.setModifyDate(new Date());
         return projectRepository.save(project);
     }
 
     @Override
     public Project add(Project project) {
-        return projectRepository.save(project);
+        project.setEnabled(true);
+        project.setCreateBy("admin");
+        project.setCreateDate(new Date());
+        project.setModifyBy("admin");
+        project.setModifyDate(new Date());
+        Project p = projectRepository.save(project);
+        LogUtils.log("tb_project", p.getId(), "创建一条新纪录", "admin");
+        return p;
     }
 
     @Override

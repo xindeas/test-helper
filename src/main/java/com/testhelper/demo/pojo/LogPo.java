@@ -11,7 +11,7 @@ public class LogPo {
     private Long id;
     private String targetTb;
     private Long targetId;
-    private String desc;
+    private String remark;
     private Date createDate;
     private String createBy;
 }

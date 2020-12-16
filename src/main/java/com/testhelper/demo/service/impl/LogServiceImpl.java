@@ -12,8 +12,10 @@ import com.testhelper.demo.service.LogService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 public class LogServiceImpl extends BaseServiceImpl<Log> implements LogService {
     @Autowired
     private LogRepository logRepository;
@@ -33,11 +35,7 @@ public class LogServiceImpl extends BaseServiceImpl<Log> implements LogService {
         JPAQuery<Log> query = queryFactory
                 .selectFrom(qClass)
                 .where(builder);
-        try {
-            query = sortCreator(qClass, LogPo.class, query, page.getSorts());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        query = sortCreator(qClass, LogPo.class, query, page.getSorts());
         return this.paginationQuery(query, page);
     }
 
@@ -66,6 +64,12 @@ public class LogServiceImpl extends BaseServiceImpl<Log> implements LogService {
             QLog qClass = QLog.log;
             if (null != po.getId()) {
                 builder.and(qClass.id.eq(po.getId()));
+            }
+            if (null != po.getTargetId()) {
+                builder.and(qClass.targetId.eq(po.getTargetId()));
+            }
+            if (StringUtils.isNotBlank(po.getTargetTb())) {
+                builder.and(qClass.targetTb.eq(po.getTargetTb()));
             }
             if (StringUtils.isNotBlank(po.getCreateBy())) {
                 builder.and(qClass.createBy.eq(po.getCreateBy()));

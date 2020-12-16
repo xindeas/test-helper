@@ -1,37 +1,21 @@
 package com.testhelper.demo.service.impl;
 
 import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.support.QueryBase;
-import com.querydsl.core.types.Order;
-import com.querydsl.core.types.OrderSpecifier;
-import com.querydsl.core.types.Projections;
-import com.querydsl.core.types.dsl.ComparableExpressionBase;
-import com.querydsl.core.types.dsl.EntityPathBase;
-import com.querydsl.core.types.dsl.Expressions;
-import com.querydsl.jpa.JPAQueryBase;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.testhelper.demo.config.ReflectAnno;
-import com.testhelper.demo.dto.UserDto;
 import com.testhelper.demo.entity.QUser;
 import com.testhelper.demo.entity.User;
 import com.testhelper.demo.po.PageHelperPo;
-import com.testhelper.demo.po.SortHelperPo;
 import com.testhelper.demo.pojo.UserPo;
 import com.testhelper.demo.repository.UserRepository;
 import com.testhelper.demo.service.UserService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
-
-import javax.persistence.EntityManager;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 public class UserServiceImpl extends BaseServiceImpl<User> implements UserService {
     @Autowired
     private UserRepository userRepository;
@@ -75,11 +59,7 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
         JPAQuery<User> query = queryFactory
                 .selectFrom(qClass)
                 .where(builder);
-        try {
-            query = sortCreator(qClass, UserPo.class, query, page.getSorts());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        query = sortCreator(qClass, UserPo.class, query, page.getSorts());
         return this.paginationQuery(query, page);
     }
     private BooleanBuilder whereCreator(UserPo po) {

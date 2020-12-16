@@ -1,6 +1,7 @@
 package com.testhelper.demo.controller;
 
 import com.testhelper.demo.component.ProjectComponent;
+import com.testhelper.demo.dto.ProjectDto;
 import com.testhelper.demo.entity.Project;
 import com.testhelper.demo.entity.User;
 import com.testhelper.demo.po.PageHelperPo;
@@ -51,7 +52,7 @@ public class ProjectController {
      * @return
      */
     @PostMapping("/save")
-    private ResultHelperPo save (@RequestBody Project project) {
+    private ResultHelperPo save (@RequestBody ProjectDto project) {
         return projectComponent.save(project);
     }
 
@@ -61,7 +62,7 @@ public class ProjectController {
      * @return
      */
     @PostMapping("/add")
-    private ResultHelperPo add (@RequestBody Project project) {
+    private ResultHelperPo add (@RequestBody ProjectDto project) {
         return projectComponent.add(project);
     }
 

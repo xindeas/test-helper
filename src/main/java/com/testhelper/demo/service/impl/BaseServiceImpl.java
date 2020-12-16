@@ -9,6 +9,7 @@ import com.testhelper.demo.config.ReflectAnno;
 import com.testhelper.demo.entity.QUser;
 import com.testhelper.demo.po.PageHelperPo;
 import com.testhelper.demo.po.SortHelperPo;
+import lombok.SneakyThrows;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.CollectionUtils;
 
@@ -36,7 +37,8 @@ public class BaseServiceImpl<T> {
         }
         return page;
     }
-    protected JPAQuery sortCreator(EntityPathBase mainTbClass, Class poClass, JPAQuery query, List<SortHelperPo> sortList) throws Exception {
+    @SneakyThrows
+    protected JPAQuery sortCreator(EntityPathBase mainTbClass, Class poClass, JPAQuery query, List<SortHelperPo> sortList) {
         if (null != sortList && !CollectionUtils.isEmpty(sortList)) {
             QUser qClass = QUser.user;
             for (SortHelperPo po : sortList) {
@@ -44,7 +46,7 @@ public class BaseServiceImpl<T> {
                 ReflectAnno ra = f.getAnnotation(ReflectAnno.class);
                 ComparableExpressionBase ceb;
                 if (null == ra) {
-                    Field col = mainTbClass.getClass().getField(po.getColumn());
+                    Field col = mainTbClass.getClass().getDeclaredField(po.getColumn());
                     ceb = (ComparableExpressionBase) col.get(mainTbClass);
                 }
                 else {
@@ -52,7 +54,7 @@ public class BaseServiceImpl<T> {
                     String column = StringUtils.isNotBlank(ra.column()) ? ra.column() : po.getColumn();
                     String instance = ra.instance();
 
-                    Field col = reClass.getField(column);
+                    Field col = reClass.getDeclaredField(column);
                     ceb = (ComparableExpressionBase) col.get(reClass.getDeclaredConstructor().newInstance(instance));
                 }
                 if (Order.DESC.equals(po.getOrder())) {

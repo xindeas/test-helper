@@ -4,18 +4,20 @@ import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.testhelper.demo.entity.ProjectAuth;
-import com.testhelper.demo.entity.QProject;
 import com.testhelper.demo.entity.QProjectAuth;
 import com.testhelper.demo.po.PageHelperPo;
 import com.testhelper.demo.pojo.ProjectAuthPo;
 import com.testhelper.demo.repository.ProjectAuthRepository;
-import com.testhelper.demo.repository.ProjectRepository;
 import com.testhelper.demo.service.ProjectAuthService;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
+
+import java.util.List;
 
 @Service
+@Transactional
 public class ProjectAuthServiceImpl extends BaseServiceImpl<ProjectAuth> implements ProjectAuthService {
     @Autowired
     private ProjectAuthRepository projectAuthRepository;
@@ -35,11 +37,7 @@ public class ProjectAuthServiceImpl extends BaseServiceImpl<ProjectAuth> impleme
         JPAQuery<ProjectAuth> query = queryFactory
                 .selectFrom(qClass)
                 .where(builder);
-        try {
-            query = sortCreator(qClass, ProjectAuthPo.class, query, page.getSorts());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        query = sortCreator(qClass, ProjectAuthPo.class, query, page.getSorts());
         return this.paginationQuery(query, page);
     }
 
@@ -56,6 +54,17 @@ public class ProjectAuthServiceImpl extends BaseServiceImpl<ProjectAuth> impleme
     @Override
     public ProjectAuth add(ProjectAuth project) {
         return projectAuthRepository.save(project);
+    }
+
+    @Override
+    public List<ProjectAuth> saveOrAdd(List<ProjectAuth> list) {
+        if (CollectionUtils.isEmpty(list)) {
+            return list;
+        }
+        for (ProjectAuth item : list) {
+            item = projectAuthRepository.save(item);
+        }
+        return list;
     }
 
     @Override
