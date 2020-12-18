@@ -7,15 +7,18 @@ import java.util.Date;
 
 /**
  * @Author: Xindeas
- * @Date: 2020/12/17 14:23
+ * @Date: 2020/12/17 15:14
  */
 @Getter
 @Setter
-public class ProjectPo {
+public class DefectPo {
     private Long id;
-    private Long belongsTo;
-    private String name;
-    private Boolean enabled;
+    private String title;
+    private String defectNo;
+    private String desc;
+    private String targetVer;
+    private String module;
+    private String status;
     private Date createDate;
     private String createBy;
     private Date modifyDate;

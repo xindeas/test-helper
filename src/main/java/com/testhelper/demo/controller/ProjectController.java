@@ -10,6 +10,10 @@ import com.testhelper.demo.pojo.ProjectPo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * @Author: Xindeas
+ * @Date: 2020/12/17 14:23
+ */
 @RestController
 @RequestMapping("/project")
 @CrossOrigin(origins = "*", maxAge=3600)
@@ -23,7 +27,7 @@ public class ProjectController {
      * @return
      */
     @PostMapping("/query")
-    private ResultHelperPo query (@RequestBody PageHelperPo<Project, ProjectPo> page) {
+    private ResultHelperPo query (@RequestBody PageHelperPo<ProjectDto, ProjectPo> page) {
         return projectComponent.query(page);
     }
 

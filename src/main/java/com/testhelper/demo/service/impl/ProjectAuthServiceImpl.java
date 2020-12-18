@@ -1,10 +1,14 @@
 package com.testhelper.demo.service.impl;
 
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.testhelper.demo.dto.ProjectAuthDto;
 import com.testhelper.demo.entity.ProjectAuth;
+import com.testhelper.demo.entity.QProject;
 import com.testhelper.demo.entity.QProjectAuth;
+import com.testhelper.demo.entity.QUser;
 import com.testhelper.demo.po.PageHelperPo;
 import com.testhelper.demo.pojo.ProjectAuthPo;
 import com.testhelper.demo.repository.ProjectAuthRepository;
@@ -16,9 +20,13 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 
+/**
+ * @Author: Xindeas
+ * @Date: 2020/12/17 14:23
+ */
 @Service
-@Transactional
-public class ProjectAuthServiceImpl extends BaseServiceImpl<ProjectAuth> implements ProjectAuthService {
+@Transactional(rollbackFor = Exception.class)
+public class ProjectAuthServiceImpl extends BaseServiceImpl implements ProjectAuthService {
     @Autowired
     private ProjectAuthRepository projectAuthRepository;
     @Autowired
@@ -57,14 +65,44 @@ public class ProjectAuthServiceImpl extends BaseServiceImpl<ProjectAuth> impleme
     }
 
     @Override
-    public List<ProjectAuth> saveOrAdd(List<ProjectAuth> list) {
+    public List<ProjectAuth> saveOrAdd(Long projectId, List<ProjectAuth> list) {
+        // 全部删除
+        projectAuthRepository.deleteProjectAuthsByProjectId(projectId);
         if (CollectionUtils.isEmpty(list)) {
             return list;
         }
         for (ProjectAuth item : list) {
+            item.setId(null);
+            item.setProjectId(projectId);
             item = projectAuthRepository.save(item);
         }
         return list;
+    }
+
+    @Override
+    public List<ProjectAuth> findAllByProjectId(Long projectId) {
+        return projectAuthRepository.findProjectAuthByProjectId(projectId);
+    }
+
+    @Override
+    public List<ProjectAuthDto> findAuthUsersByProjectId(Long projectId) {
+        QProjectAuth qClass = QProjectAuth.projectAuth;
+        QUser qUser = QUser.user;
+
+        JPAQuery<ProjectAuthDto> query = queryFactory
+                .select(Projections.bean(ProjectAuthDto.class,
+                        qClass.projectId.as("projectId"),
+                        qUser.id.as("userId"),
+                        qUser.avatar.as("userAvatar"),
+                        qUser.name.as("userName"),
+                        qUser.login.as("userLogin"),
+                        qUser.mobile.as("userMobile"),
+                        qUser.email.as("userEmail")
+                ))
+                .from(qClass)
+                .leftJoin(qUser).on(qUser.id.eq(qClass.userId))
+                .where(qClass.projectId.eq(projectId));
+        return query.fetch();
     }
 
     @Override

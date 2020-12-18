@@ -7,10 +7,14 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
 
+/**
+ * @Author: Xindeas
+ * @Date: 2020/12/17 14:23
+ */
 @Component
 @Aspect
 public class ResultHelperPoAspect {
-//    @Pointcut("execution(* com.testhelper.demo.controller.UserController.*(..))")
+    /**@Pointcut("execution(* com.testhelper.demo.controller.UserController.*(..))")*/
     @Pointcut("within(com.testhelper.demo.component..*)")
     private void exc() {}
     @Around("exc()")

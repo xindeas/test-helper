@@ -1,14 +1,19 @@
 package com.testhelper.demo.controller;
 
 import com.testhelper.demo.component.UserComponent;
-import com.testhelper.demo.dto.UserDto;
 import com.testhelper.demo.entity.User;
 import com.testhelper.demo.po.PageHelperPo;
 import com.testhelper.demo.po.ResultHelperPo;
 import com.testhelper.demo.pojo.UserPo;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * @Author: Xindeas
+ * @Date: 2020/12/17 14:23
+ */
 @RestController
 @RequestMapping("/user")
 @CrossOrigin(origins = "*", maxAge=3600)
@@ -74,5 +79,12 @@ public class UserController {
     @PostMapping("/login")
     private ResultHelperPo login (@RequestBody User user) {
         return userComponent.login(user);
+    }
+
+    @RequestMapping("/logout")
+    public ResultHelperPo logout() {
+        Subject subject = SecurityUtils.getSubject();
+        subject.logout();
+        return new ResultHelperPo(true, null, "退出登录");
     }
 }

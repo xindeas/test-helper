@@ -5,7 +5,19 @@ import com.testhelper.demo.service.LogService;
 
 import java.util.Date;
 
+/**
+ * 操作记录工具
+ * @Author: Xindeas
+ * @Date: 2020/12/17 14:23
+ */
 public class LogUtils {
+    /**
+     * 记录操作记录
+     * @param targetTb 关联表名
+     * @param targetId 关联表ID
+     * @param remark 备注
+     * @param createBy 创建人
+     */
     public static void log(String targetTb, Long targetId, String remark, String createBy) {
         LogService logService = SpringBeanUtils.getBean(LogService.class);
         Log log = new Log();

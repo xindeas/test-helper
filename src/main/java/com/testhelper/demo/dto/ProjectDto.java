@@ -7,9 +7,15 @@ import lombok.Setter;
 
 import java.util.List;
 
+/**
+ * @Author: Xindeas
+ * @Date: 2020/12/17 14:23
+ */
 @Getter
 @Setter
 public class ProjectDto {
     private Project project;
     private List<ProjectAuth> auths;
+    private List<ProjectAuthDto> authUsers;
+    private Long userCount;
 }

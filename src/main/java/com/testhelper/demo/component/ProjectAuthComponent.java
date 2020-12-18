@@ -8,6 +8,10 @@ import com.testhelper.demo.service.ProjectAuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+/**
+ * @Author: Xindeas
+ * @Date: 2020/12/17 14:23
+ */
 @Component
 public class ProjectAuthComponent {
     @Autowired

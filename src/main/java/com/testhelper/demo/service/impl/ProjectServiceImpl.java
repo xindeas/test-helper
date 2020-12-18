@@ -1,18 +1,24 @@
 package com.testhelper.demo.service.impl;
 
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.testhelper.demo.dto.ProjectDto;
 import com.testhelper.demo.entity.Project;
 import com.testhelper.demo.entity.QProject;
 import com.testhelper.demo.entity.QProjectAuth;
+import com.testhelper.demo.entity.User;
 import com.testhelper.demo.po.PageHelperPo;
 import com.testhelper.demo.pojo.ProjectPo;
+import com.testhelper.demo.repository.ProjectAuthRepository;
 import com.testhelper.demo.repository.ProjectRepository;
 import com.testhelper.demo.service.ProjectService;
 import com.testhelper.demo.utils.EntityUtils;
 import com.testhelper.demo.utils.LogUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,27 +26,38 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * @Author: Xindeas
+ * @Date: 2020/12/17 14:23
+ */
 @Service
-@Transactional
-public class ProjectServiceImpl extends BaseServiceImpl<Project> implements ProjectService {
+@Transactional(rollbackFor = Exception.class)
+public class ProjectServiceImpl extends BaseServiceImpl implements ProjectService {
     @Autowired
     private ProjectRepository projectRepository;
     @Autowired
     JPAQueryFactory queryFactory;
 
     @Override
-    public PageHelperPo<Project, ProjectPo> query(PageHelperPo<Project, ProjectPo> page) {
+    public PageHelperPo<ProjectDto, ProjectPo> query(PageHelperPo<ProjectDto, ProjectPo> page) {
         if (null == page) {
             return null;
         }
+        Subject subject = SecurityUtils.getSubject();
+        subject.getPrincipal();
         QProject qClass = QProject.project;
+        QProjectAuth qAuth = QProjectAuth.projectAuth;
 
         ProjectPo po = page.getFilter();
         BooleanBuilder builder = whereCreator(po);
 
-        JPAQuery<Project> query = queryFactory
-                .selectFrom(qClass)
-                .where(builder);
+        JPAQuery<ProjectDto> query = queryFactory
+                .select(Projections.bean(ProjectDto.class, qClass.as("project"), qAuth.count().as("userCount")))
+                .from(qClass)
+                .leftJoin(qAuth)
+                .on(qClass.id.eq(qAuth.projectId))
+                .where(builder)
+                .groupBy(qClass.id);
         query = sortCreator(qClass, ProjectPo.class, query, page.getSorts());
         return this.paginationQuery(query, page);
     }
@@ -73,6 +90,7 @@ public class ProjectServiceImpl extends BaseServiceImpl<Project> implements Proj
     @Override
     public Project save(Project project) {
         Project old = projectRepository.findProjectById(project.getId());
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
 
         String msg = EntityUtils.compareEntity(old, project);
         if (StringUtils.isNotBlank(msg)) {

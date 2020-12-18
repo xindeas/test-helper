@@ -18,21 +18,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 基础分页查询
- * @param <T> 出参，通常是dto
+ * @Author: Xindeas
+ * @Date: 2020/12/17 14:23
  */
-public class BaseServiceImpl<T> {
-    protected PageHelperPo paginationQuery(JPAQuery<T> query, PageHelperPo page) {
+public class BaseServiceImpl {
+    protected PageHelperPo paginationQuery(JPAQuery<?> query, PageHelperPo page) {
         long total = query.fetchCount();
         page.setTotalCount((int)total);
         if (page.getPagination()) {
-            List<T> resultList = query
+            List<?> resultList = query
                     .offset(page.getPageIndex() * page.getPageSize())
                     .limit(page.getPageSize())
                     .fetch();
             page.setResult(resultList);
         } else {
-            List<T> resultList = query.fetch();
+            List<?> resultList = query.fetch();
             page.setResult(resultList);
         }
         return page;

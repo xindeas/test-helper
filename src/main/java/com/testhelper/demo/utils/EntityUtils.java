@@ -7,7 +7,18 @@ import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+/**
+ * 实体类工具
+ * @Author: Xindeas
+ * @Date: 2020/12/17 14:23
+ */
 public class EntityUtils {
+    /**
+     * 两个对象比较获取修改的内容
+     * @param old 旧对象
+     * @param current 新对象
+     * @return
+     */
     @SneakyThrows
     public static String compareEntity(Object old, Object current) {
         if (old.getClass().getName() != current.getClass().getName()) {

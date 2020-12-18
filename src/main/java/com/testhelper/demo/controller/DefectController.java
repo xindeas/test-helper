@@ -1,23 +1,23 @@
 package com.testhelper.demo.controller;
 
-import com.testhelper.demo.component.ProjectAuthComponent;
-import com.testhelper.demo.entity.ProjectAuth;
+import com.testhelper.demo.component.DefectComponent;
+import com.testhelper.demo.entity.Defect;
 import com.testhelper.demo.po.PageHelperPo;
 import com.testhelper.demo.po.ResultHelperPo;
-import com.testhelper.demo.pojo.ProjectAuthPo;
+import com.testhelper.demo.pojo.DefectPo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 /**
  * @Author: Xindeas
- * @Date: 2020/12/17 14:23
+ * @Date: 2020/12/17 15:25
  */
 @RestController
-@RequestMapping("/projectAuth")
+@RequestMapping("/defect")
 @CrossOrigin(origins = "*", maxAge=3600)
-public class ProjectAuthController {
+public class DefectController {
     @Autowired
-    private ProjectAuthComponent projectAuthComponent;
+    private DefectComponent defectComponent;
 
     /**
      * 分页查询
@@ -25,8 +25,8 @@ public class ProjectAuthController {
      * @return
      */
     @PostMapping("/query")
-    private ResultHelperPo query (@RequestBody PageHelperPo<ProjectAuth, ProjectAuthPo> page) {
-        return projectAuthComponent.query(page);
+    private ResultHelperPo query (@RequestBody PageHelperPo<Defect, DefectPo> page) {
+        return defectComponent.query(page);
     }
 
     /**
@@ -36,27 +36,27 @@ public class ProjectAuthController {
      */
     @GetMapping("/load/{id}")
     private ResultHelperPo load (@PathVariable("id") Long id) {
-        return projectAuthComponent.load(id);
+        return defectComponent.load(id);
     }
 
     /**
      * 修改
-     * @param projectAuth
+     * @param defect
      * @return
      */
     @PostMapping("/save")
-    private ResultHelperPo save (@RequestBody ProjectAuth projectAuth) {
-        return projectAuthComponent.save(projectAuth);
+    private ResultHelperPo save (@RequestBody Defect defect) {
+        return defectComponent.save(defect);
     }
 
     /**
      * 新增
-     * @param projectAuth
+     * @param defect
      * @return
      */
     @PostMapping("/add")
-    private ResultHelperPo add (@RequestBody ProjectAuth projectAuth) {
-        return projectAuthComponent.add(projectAuth);
+    private ResultHelperPo add (@RequestBody Defect defect) {
+        return defectComponent.add(defect);
     }
 
     /**
@@ -66,7 +66,6 @@ public class ProjectAuthController {
      */
     @DeleteMapping("/delete/{id}")
     private ResultHelperPo delete (@PathVariable("id") Long id) {
-        return projectAuthComponent.delete(id);
+        return defectComponent.delete(id);
     }
-
 }

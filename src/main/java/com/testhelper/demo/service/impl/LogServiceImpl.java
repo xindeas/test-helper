@@ -14,9 +14,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * @Author: Xindeas
+ * @Date: 2020/12/17 14:23
+ */
 @Service
-@Transactional
-public class LogServiceImpl extends BaseServiceImpl<Log> implements LogService {
+@Transactional(rollbackFor = Exception.class)
+public class LogServiceImpl extends BaseServiceImpl implements LogService {
     @Autowired
     private LogRepository logRepository;
     @Autowired

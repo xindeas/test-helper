@@ -8,6 +8,10 @@ import lombok.Setter;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * @Author: Xindeas
+ * @Date: 2020/12/17 14:23
+ */
 @Getter
 @Setter
 public class UserPo {

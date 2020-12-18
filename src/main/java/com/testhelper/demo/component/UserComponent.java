@@ -7,12 +7,21 @@ import com.testhelper.demo.po.ResultHelperPo;
 import com.testhelper.demo.pojo.UserPo;
 import com.testhelper.demo.service.UserService;
 import com.testhelper.demo.utils.StrUtils;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.IncorrectCredentialsException;
+import org.apache.shiro.authc.UnknownAccountException;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 import com.testhelper.demo.utils.Base64Utils;
 
+/**
+ * @Author: Xindeas
+ * @Date: 2020/12/17 14:23
+ */
 @Component
 public class UserComponent {
     @Autowired
@@ -43,13 +52,18 @@ public class UserComponent {
     }
     public ResultHelperPo login(User user) {
         String encoded = Base64Utils.encode(user.getPwd());
-        User userData = userService.login(user.getLogin());
-        if (null == userData) {
+        Subject subject = SecurityUtils.getSubject();
+        UsernamePasswordToken token = new UsernamePasswordToken(user.getLogin(), encoded);
+        try {
+            subject.login(token);
+        } catch (IncorrectCredentialsException ice) {
             return new ResultHelperPo(false, user, "账号或密码不正确");
+        } catch (UnknownAccountException uae) {
+            return new ResultHelperPo(false, user, "账户不存在");
         }
-        if (StrUtils.nullToEmpty(encoded).equals(userData.getPwd())) {
-            return new ResultHelperPo(true, userData, "登陆成功");
-        }
-        return new ResultHelperPo(false, user, "登陆失败");
+        subject.getPrincipal();
+        User userData = userService.login(user.getLogin());
+        subject.getSession().setAttribute("user", userData);
+        return new ResultHelperPo(true, userData, "登陆成功");
     }
 }

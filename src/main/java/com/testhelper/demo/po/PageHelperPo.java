@@ -9,6 +9,8 @@ import java.util.List;
  * 分页辅助类
  * @param <T> 返回值类型，一般建议为dto类
  * @param <P> 过滤条件类型，一般建议为pojo
+ * @Author: Xindeas
+ * @Date: 2020/12/17 14:23
  */
 @Getter
 @Setter

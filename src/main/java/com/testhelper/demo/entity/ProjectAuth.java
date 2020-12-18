@@ -7,20 +7,25 @@ import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 import java.util.Date;
 
-
+/**
+ * @Author: Xindeas
+ * @Date: 2020/12/17 14:23
+ */
 @Setter
 @Getter
 @Entity
 @Table(name="tb_project_auth")
 public class ProjectAuth {
     @Id
-//    @GeneratedValue(generator = "idGenerator")
-//    @GenericGenerator(name = "idGenerator", strategy = "uuid")
+    /**
+     * @GeneratedValue(generator = "idGenerator")
+     * @GenericGenerator(name = "idGenerator", strategy = "uuid")
+     */
     @GeneratedValue(strategy=GenerationType.IDENTITY)
-    @Column(name="id")
+    @Column(name="id", columnDefinition="流水号")
     private Long id;
-    @Column(name="project_id")
+    @Column(name="project_id", columnDefinition="项目ID")
     private Long projectId;
-    @Column(name="user_id")
+    @Column(name="user_id", columnDefinition="用户ID")
     private Long userId;
 }

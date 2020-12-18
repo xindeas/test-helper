@@ -8,6 +8,10 @@ import com.testhelper.demo.pojo.LogPo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * @Author: Xindeas
+ * @Date: 2020/12/17 14:23
+ */
 @RestController
 @RequestMapping("/log")
 @CrossOrigin(origins = "*", maxAge=3600)

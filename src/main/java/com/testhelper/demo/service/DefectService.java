@@ -1,43 +1,41 @@
 package com.testhelper.demo.service;
 
-import com.testhelper.demo.entity.Log;
+import com.testhelper.demo.entity.Defect;
 import com.testhelper.demo.po.PageHelperPo;
-import com.testhelper.demo.pojo.LogPo;
-
-import java.util.List;
+import com.testhelper.demo.pojo.DefectPo;
 
 /**
  * @Author: Xindeas
- * @Date: 2020/12/17 14:23
+ * @Date: 2020/12/17 15:17
  */
-public interface LogService {
+public interface DefectService {
     /**
      * 分页查询
      * @param page 分页参数
      * @return
      */
-    public PageHelperPo<Log, LogPo> query(PageHelperPo<Log, LogPo> page);
+    public PageHelperPo<Defect, DefectPo> query(PageHelperPo<Defect, DefectPo> page);
 
     /**
      * 根据ID加载实体
      * @param id 流水号
      * @return
      */
-    public Log load(Long id);
+    public Defect load(Long id);
 
     /**
      * 编辑
-     * @param log
+     * @param defect
      * @return
      */
-    public Log save(Log log);
+    public Defect save(Defect defect);
 
     /**
      * 新增
-     * @param log
+     * @param defect
      * @return
      */
-    public Log add(Log log);
+    public Defect add(Defect defect);
 
     /**
      * 删除

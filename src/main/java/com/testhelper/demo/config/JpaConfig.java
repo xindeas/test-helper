@@ -7,8 +7,12 @@ import org.springframework.context.annotation.Configuration;
 
 import javax.persistence.EntityManager;
 
+/**
+ * @Author: Xindeas
+ * @Date: 2020/12/17 14:23
+ */
 @Configuration
-public class JPAConfig {
+public class JpaConfig {
     @Bean
     @Autowired
     public JPAQueryFactory jpaQuery(EntityManager entityManager) {

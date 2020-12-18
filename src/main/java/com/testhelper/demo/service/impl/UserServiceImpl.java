@@ -14,9 +14,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * @Author: Xindeas
+ * @Date: 2020/12/17 14:23
+ */
 @Service
-@Transactional
-public class UserServiceImpl extends BaseServiceImpl<User> implements UserService {
+@Transactional(rollbackFor = Exception.class)
+public class UserServiceImpl extends BaseServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
     @Autowired
@@ -47,6 +51,7 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
         return userRepository.findByLogin(login);
     }
 
+    @Override
     public PageHelperPo<User, UserPo> query(PageHelperPo<User, UserPo> page) {
         if (null == page) {
             return null;
