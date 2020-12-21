@@ -7,21 +7,15 @@ import java.util.Date;
 
 /**
  * @Author: Xindeas
- * @Date: 2020/12/17 15:14
+ * @Date: 2020/12/21 9:25
  */
 @Getter
 @Setter
-public class DefectPo {
+public class DefectCommentPo {
     private Long id;
-    private String title;
-    private String defectNo;
+    private Long defectId;
+    private Long userId;
     private String desc;
-    private String targetVer;
-    private String module;
-    private Long assignTo;
-    private Long findBy;
-    private Long testBy;
-    private String status;
     private Date createDate;
     private String createBy;
     private Date modifyDate;

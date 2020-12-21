@@ -33,6 +33,12 @@ public class Defect {
     private String targetVer;
     @Column(name="module", columnDefinition="模块", length=50)
     private String module;
+    @Column(name="assign_to", columnDefinition="处理人")
+    private Long assignTo;
+    @Column(name="find_by", columnDefinition="发现人")
+    private Long findBy;
+    @Column(name="test_by", columnDefinition="跟踪测试人")
+    private Long testBy;
     @Column(name="status", columnDefinition="状态", length=10)
     private String status;
     @Column(name="create_date", columnDefinition="创建时间")

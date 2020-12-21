@@ -3,25 +3,20 @@ package com.testhelper.demo.pojo;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.persistence.Column;
 import java.util.Date;
 
 /**
  * @Author: Xindeas
- * @Date: 2020/12/17 15:14
+ * @Date: 2020/12/21 13:42
  */
 @Getter
 @Setter
-public class DefectPo {
+public class ProjectVersionPo {
     private Long id;
-    private String title;
-    private String defectNo;
+    private Long projectId;
+    private String versionNo;
     private String desc;
-    private String targetVer;
-    private String module;
-    private Long assignTo;
-    private Long findBy;
-    private Long testBy;
-    private String status;
     private Date createDate;
     private String createBy;
     private Date modifyDate;

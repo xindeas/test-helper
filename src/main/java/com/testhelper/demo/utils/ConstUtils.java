@@ -9,6 +9,9 @@ public class ConstUtils {
     public static final String CODE_200 = "200";
     public static final String CODE_500 = "500";
 
+    /**
+     * 缺陷状态
+     */
     public static enum DEFECT_STATUS {
         // 新建
         NEW,

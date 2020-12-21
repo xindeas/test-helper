@@ -5,7 +5,6 @@ import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.testhelper.demo.entity.Defect;
 import com.testhelper.demo.entity.QDefect;
-import com.testhelper.demo.entity.QLog;
 import com.testhelper.demo.po.PageHelperPo;
 import com.testhelper.demo.pojo.DefectPo;
 import com.testhelper.demo.repository.DefectRepository;
@@ -74,19 +73,28 @@ public class DefectServiceImpl extends BaseServiceImpl implements DefectService 
                 builder.and(qClass.title.eq(po.getTitle()));
             }
             if (StringUtils.isNotBlank(po.getDefectNo())) {
-                builder.and(qClass.title.eq(po.getDefectNo()));
+                builder.and(qClass.defectNo.eq(po.getDefectNo()));
             }
             if (StringUtils.isNotBlank(po.getDesc())) {
-                builder.and(qClass.title.eq(po.getDesc()));
+                builder.and(qClass.desc.eq(po.getDesc()));
             }
             if (StringUtils.isNotBlank(po.getTargetVer())) {
-                builder.and(qClass.title.eq(po.getTargetVer()));
+                builder.and(qClass.targetVer.eq(po.getTargetVer()));
             }
             if (StringUtils.isNotBlank(po.getModule())) {
-                builder.and(qClass.title.eq(po.getModule()));
+                builder.and(qClass.module.eq(po.getModule()));
+            }
+            if (null != po.getAssignTo()) {
+                builder.and(qClass.assignTo.eq(po.getAssignTo()));
+            }
+            if (null != po.getFindBy()) {
+                builder.and(qClass.findBy.eq(po.getFindBy()));
+            }
+            if (null != po.getTestBy()) {
+                builder.and(qClass.testBy.eq(po.getTestBy()));
             }
             if (StringUtils.isNotBlank(po.getStatus())) {
-                builder.and(qClass.title.eq(po.getStatus()));
+                builder.and(qClass.status.eq(po.getStatus()));
             }
             if (StringUtils.isNotBlank(po.getCreateBy())) {
                 builder.and(qClass.createBy.eq(po.getCreateBy()));
