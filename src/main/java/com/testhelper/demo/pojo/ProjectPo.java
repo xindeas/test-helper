@@ -14,6 +14,7 @@ import java.util.Date;
 public class ProjectPo {
     private Long id;
     private Long belongsTo;
+    private String versionNo;
     private String name;
     private Boolean enabled;
     private Date createDate;

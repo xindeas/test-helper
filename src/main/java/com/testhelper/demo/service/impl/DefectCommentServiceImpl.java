@@ -75,8 +75,8 @@ public class DefectCommentServiceImpl extends BaseServiceImpl implements DefectC
             if (null != po.getUserId()) {
                 builder.and(qClass.userId.eq(po.getUserId()));
             }
-            if (StringUtils.isNotBlank(po.getDesc())) {
-                builder.and(qClass.desc.eq(po.getDesc()));
+            if (StringUtils.isNotBlank(po.getRemark())) {
+                builder.and(qClass.remark.eq(po.getRemark()));
             }
             if (StringUtils.isNotBlank(po.getCreateBy())) {
                 builder.and(qClass.createBy.eq(po.getCreateBy()));

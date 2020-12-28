@@ -28,6 +28,8 @@ public class Project {
     private String name;
     @Column(name="belongs_to", columnDefinition="所属用户")
     private Long belongsTo;
+    @Column(name="version_no", columnDefinition="当前版本", length=50)
+    private String versionNo;
     @Column(name="enabled", columnDefinition="启用状态")
     private Boolean enabled;
     @Column(name="create_date", columnDefinition="创建时间")

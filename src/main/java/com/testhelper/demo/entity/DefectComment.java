@@ -27,8 +27,8 @@ public class DefectComment {
     private Long defectId;
     @Column(name="user_id", columnDefinition="评论用户")
     private Long userId;
-    @Column(name="desc", columnDefinition="评论内容")
-    private String desc;
+    @Column(name="remark", columnDefinition="评论内容")
+    private String remark;
     @Column(name="create_date", columnDefinition="创建时间")
     private Date createDate;
     @Column(name="create_by", columnDefinition="创建人", length=50)

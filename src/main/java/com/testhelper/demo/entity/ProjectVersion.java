@@ -27,8 +27,8 @@ public class ProjectVersion {
     private Long projectId;
     @Column(name="version_no", columnDefinition="版本号")
     private String versionNo;
-    @Column(name="desc", columnDefinition="版本说明")
-    private String desc;
+    @Column(name="remark", columnDefinition="版本说明")
+    private String remark;
     @Column(name="create_date", columnDefinition="创建时间")
     private Date createDate;
     @Column(name="create_by", columnDefinition="创建人", length=50)

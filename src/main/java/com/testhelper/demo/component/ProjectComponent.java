@@ -7,6 +7,7 @@ import com.testhelper.demo.po.ResultHelperPo;
 import com.testhelper.demo.pojo.ProjectPo;
 import com.testhelper.demo.service.ProjectAuthService;
 import com.testhelper.demo.service.ProjectService;
+import com.testhelper.demo.service.ProjectVersionService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -23,6 +24,8 @@ public class ProjectComponent {
     private ProjectService projectService;
     @Autowired
     private ProjectAuthService projectAuthService;
+    @Autowired
+    private ProjectVersionService projectVersionService;
 
     public ResultHelperPo query(PageHelperPo<ProjectDto, ProjectPo> page) {
         return new ResultHelperPo(true, projectService.query(page), "");
@@ -52,6 +55,12 @@ public class ProjectComponent {
         }
         Project project = projectService.add(projectDto.getProject());
         projectAuthService.saveOrAdd(project.getId(), projectDto.getAuths());
+        if (!CollectionUtils.isEmpty(projectDto.getProjectVersions())) {
+            projectDto.getProjectVersions().forEach(item -> {
+                item.setProjectId(project.getId());
+                projectVersionService.add(item);
+            });
+        }
         return new ResultHelperPo(true, projectDto, "");
     }
     public ResultHelperPo delete(Long id) {

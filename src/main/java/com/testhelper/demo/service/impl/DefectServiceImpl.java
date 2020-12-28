@@ -75,8 +75,8 @@ public class DefectServiceImpl extends BaseServiceImpl implements DefectService 
             if (StringUtils.isNotBlank(po.getDefectNo())) {
                 builder.and(qClass.defectNo.eq(po.getDefectNo()));
             }
-            if (StringUtils.isNotBlank(po.getDesc())) {
-                builder.and(qClass.desc.eq(po.getDesc()));
+            if (StringUtils.isNotBlank(po.getRemark())) {
+                builder.and(qClass.remark.eq(po.getRemark()));
             }
             if (StringUtils.isNotBlank(po.getTargetVer())) {
                 builder.and(qClass.targetVer.eq(po.getTargetVer()));

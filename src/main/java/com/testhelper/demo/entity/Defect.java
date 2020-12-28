@@ -27,8 +27,8 @@ public class Defect {
     private String title;
     @Column(name="defect_no", columnDefinition="缺陷编号", length=50)
     private String defectNo;
-    @Column(name="desc", columnDefinition="详细描述")
-    private String desc;
+    @Column(name="remark", columnDefinition="详细描述")
+    private String remark;
     @Column(name="target_ver", columnDefinition="目标版本", length=50)
     private String targetVer;
     @Column(name="module", columnDefinition="模块", length=50)

@@ -2,6 +2,7 @@ package com.testhelper.demo.dto;
 
 import com.testhelper.demo.entity.Project;
 import com.testhelper.demo.entity.ProjectAuth;
+import com.testhelper.demo.entity.ProjectVersion;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,4 +19,5 @@ public class ProjectDto {
     private List<ProjectAuth> auths;
     private List<ProjectAuthDto> authUsers;
     private Long userCount;
+    private List<ProjectVersion> projectVersions;
 }

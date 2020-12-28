@@ -16,7 +16,7 @@ public class ProjectVersionPo {
     private Long id;
     private Long projectId;
     private String versionNo;
-    private String desc;
+    private String remark;
     private Date createDate;
     private String createBy;
     private Date modifyDate;

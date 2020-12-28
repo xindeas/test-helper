@@ -15,7 +15,7 @@ public class DefectPo {
     private Long id;
     private String title;
     private String defectNo;
-    private String desc;
+    private String remark;
     private String targetVer;
     private String module;
     private Long assignTo;

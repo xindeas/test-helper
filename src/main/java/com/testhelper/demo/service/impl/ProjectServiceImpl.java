@@ -127,6 +127,9 @@ public class ProjectServiceImpl extends BaseServiceImpl implements ProjectServic
             if (StringUtils.isNotBlank(po.getName())) {
                 builder.and(qClass.name.eq(po.getName()));
             }
+            if (StringUtils.isNotBlank(po.getVersionNo())) {
+                builder.and(qClass.versionNo.eq(po.getVersionNo()));
+            }
             if (null != po.getBelongsTo()) {
                 builder.and(qClass.belongsTo.eq(po.getBelongsTo()));
             }

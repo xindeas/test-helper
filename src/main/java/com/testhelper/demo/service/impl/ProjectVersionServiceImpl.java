@@ -3,16 +3,23 @@ package com.testhelper.demo.service.impl;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.testhelper.demo.entity.Project;
 import com.testhelper.demo.entity.ProjectVersion;
 import com.testhelper.demo.entity.QProjectVersion;
+import com.testhelper.demo.entity.User;
 import com.testhelper.demo.po.PageHelperPo;
 import com.testhelper.demo.pojo.ProjectVersionPo;
 import com.testhelper.demo.repository.ProjectVersionRepository;
 import com.testhelper.demo.service.ProjectVersionService;
+import com.testhelper.demo.utils.EntityUtils;
+import com.testhelper.demo.utils.LogUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Date;
 
 /**
  * @Author: Xindeas
@@ -49,12 +56,27 @@ public class ProjectVersionServiceImpl extends BaseServiceImpl implements Projec
 
     @Override
     public ProjectVersion save(ProjectVersion projectVersion) {
+        ProjectVersion old = projectVersionRepository.findProjectVersionById(projectVersion.getId());
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+
+        String msg = EntityUtils.compareEntity(old, projectVersion);
+        if (StringUtils.isNotBlank(msg)) {
+            LogUtils.log("tb_project", projectVersion.getProjectId(), msg, "admin");
+        }
+        projectVersion.setModifyBy("admin");
+        projectVersion.setModifyDate(new Date());
         return projectVersionRepository.save(projectVersion);
     }
 
     @Override
     public ProjectVersion add(ProjectVersion projectVersion) {
-        return projectVersionRepository.save(projectVersion);
+        projectVersion.setCreateBy("admin");
+        projectVersion.setCreateDate(new Date());
+        projectVersion.setModifyBy("admin");
+        projectVersion.setModifyDate(new Date());
+        ProjectVersion p = projectVersionRepository.save(projectVersion);
+        LogUtils.log("tb_project", p.getProjectId(), "添加新版本" + projectVersion.getVersionNo(), "admin");
+        return p;
     }
 
     @Override
@@ -74,8 +96,8 @@ public class ProjectVersionServiceImpl extends BaseServiceImpl implements Projec
             if (StringUtils.isNotBlank(po.getVersionNo())) {
                 builder.and(qClass.versionNo.eq(po.getVersionNo()));
             }
-            if (StringUtils.isNotBlank(po.getDesc())) {
-                builder.and(qClass.desc.eq(po.getDesc()));
+            if (StringUtils.isNotBlank(po.getRemark())) {
+                builder.and(qClass.remark.eq(po.getRemark()));
             }
             if (StringUtils.isNotBlank(po.getCreateBy())) {
                 builder.and(qClass.createBy.eq(po.getCreateBy()));

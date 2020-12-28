@@ -15,7 +15,7 @@ public class DefectCommentPo {
     private Long id;
     private Long defectId;
     private Long userId;
-    private String desc;
+    private String remark;
     private Date createDate;
     private String createBy;
     private Date modifyDate;
