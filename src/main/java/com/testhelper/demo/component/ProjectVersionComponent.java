@@ -24,6 +24,13 @@ public class ProjectVersionComponent {
     public ResultHelperPo load(Long id) {
         return new ResultHelperPo(true, projectVersionService.load(id), "");
     }
+    public ResultHelperPo checkUnique(Long projectId, Long id, String no) {
+        ProjectVersion pv = projectVersionService.findProjectVersionByProjectIdAndVersionNo(projectId, no);
+        if (null == pv || pv.getId().equals(id)) {
+            return new ResultHelperPo(true, null, no + "不存在");
+        }
+        return new ResultHelperPo(false, pv, no + "已存在");
+    }
     public ResultHelperPo save(ProjectVersion projectVersion) {
         if (null == projectVersion.getId()) {
             return new ResultHelperPo(false, projectVersion, "修改异常");

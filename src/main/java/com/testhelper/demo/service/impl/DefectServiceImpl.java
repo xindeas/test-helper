@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @Author: Xindeas
  * @Date: 2020/12/17 15:18
  */
-@Service
+@Service("DefectService")
 @Transactional(rollbackFor = Exception.class)
 public class DefectServiceImpl extends BaseServiceImpl implements DefectService {
     @Autowired
@@ -68,6 +68,9 @@ public class DefectServiceImpl extends BaseServiceImpl implements DefectService 
             QDefect qClass = QDefect.defect;
             if (null != po.getId()) {
                 builder.and(qClass.id.eq(po.getId()));
+            }
+            if (null != po.getProjectId()) {
+                builder.and(qClass.projectId.eq(po.getProjectId()));
             }
             if (StringUtils.isNotBlank(po.getTitle())) {
                 builder.and(qClass.title.eq(po.getTitle()));

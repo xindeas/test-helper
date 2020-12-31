@@ -10,6 +10,7 @@ import com.testhelper.demo.entity.User;
 import com.testhelper.demo.po.PageHelperPo;
 import com.testhelper.demo.pojo.ProjectVersionPo;
 import com.testhelper.demo.repository.ProjectVersionRepository;
+import com.testhelper.demo.service.ProjectService;
 import com.testhelper.demo.service.ProjectVersionService;
 import com.testhelper.demo.utils.EntityUtils;
 import com.testhelper.demo.utils.LogUtils;
@@ -25,11 +26,13 @@ import java.util.Date;
  * @Author: Xindeas
  * @Date: 2020/12/21 13:44
  */
-@Service
+@Service("ProjectVersionService")
 @Transactional(rollbackFor = Exception.class)
 public class ProjectVersionServiceImpl extends BaseServiceImpl implements ProjectVersionService {
     @Autowired
     private ProjectVersionRepository projectVersionRepository;
+    @Autowired
+    private ProjectService projectService;
     @Autowired
     JPAQueryFactory queryFactory;
     @Override
@@ -55,13 +58,23 @@ public class ProjectVersionServiceImpl extends BaseServiceImpl implements Projec
     }
 
     @Override
+    public ProjectVersion findProjectVersionByProjectIdAndVersionNo(Long projectId, String versionNo) {
+        return projectVersionRepository.findProjectVersionByProjectIdAndVersionNo(projectId, versionNo);
+    }
+
+    @Override
     public ProjectVersion save(ProjectVersion projectVersion) {
         ProjectVersion old = projectVersionRepository.findProjectVersionById(projectVersion.getId());
         User user = (User) SecurityUtils.getSubject().getPrincipal();
 
         String msg = EntityUtils.compareEntity(old, projectVersion);
         if (StringUtils.isNotBlank(msg)) {
-            LogUtils.log("tb_project", projectVersion.getProjectId(), msg, "admin");
+            LogUtils.log("tb_project", projectVersion.getProjectId(), "修改" + old.getVersionNo() + "版本;" + msg, "admin");
+        }
+        Project project = projectService.load(projectVersion.getProjectId());
+        if (null != project && project.getVersionNo().equals(old.getVersionNo()) && !projectVersion.getVersionNo().equals(old.getVersionNo())) {
+            project.setVersionNo(projectVersion.getVersionNo());
+            projectService.save(project);
         }
         projectVersion.setModifyBy("admin");
         projectVersion.setModifyDate(new Date());

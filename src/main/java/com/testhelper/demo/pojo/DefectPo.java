@@ -13,6 +13,7 @@ import java.util.Date;
 @Setter
 public class DefectPo {
     private Long id;
+    private Long projectId;
     private String title;
     private String defectNo;
     private String remark;

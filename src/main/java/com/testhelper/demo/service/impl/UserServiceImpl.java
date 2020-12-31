@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @Author: Xindeas
  * @Date: 2020/12/17 14:23
  */
-@Service
+@Service("UserService")
 @Transactional(rollbackFor = Exception.class)
 public class UserServiceImpl extends BaseServiceImpl implements UserService {
     @Autowired

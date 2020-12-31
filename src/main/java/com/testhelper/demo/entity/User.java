@@ -3,7 +3,6 @@ package com.testhelper.demo.entity;
 
 import lombok.Setter;
 import lombok.Getter;
-import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.io.Serializable;

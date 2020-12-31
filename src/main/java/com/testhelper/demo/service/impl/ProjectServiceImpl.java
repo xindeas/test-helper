@@ -11,7 +11,6 @@ import com.testhelper.demo.entity.QProjectAuth;
 import com.testhelper.demo.entity.User;
 import com.testhelper.demo.po.PageHelperPo;
 import com.testhelper.demo.pojo.ProjectPo;
-import com.testhelper.demo.repository.ProjectAuthRepository;
 import com.testhelper.demo.repository.ProjectRepository;
 import com.testhelper.demo.service.ProjectService;
 import com.testhelper.demo.utils.EntityUtils;
@@ -19,6 +18,7 @@ import com.testhelper.demo.utils.LogUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
+import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,7 +30,7 @@ import java.util.List;
  * @Author: Xindeas
  * @Date: 2020/12/17 14:23
  */
-@Service
+@Service("ProjectService")
 @Transactional(rollbackFor = Exception.class)
 public class ProjectServiceImpl extends BaseServiceImpl implements ProjectService {
     @Autowired
@@ -84,7 +84,10 @@ public class ProjectServiceImpl extends BaseServiceImpl implements ProjectServic
 
     @Override
     public Project load(Long id) {
-        return projectRepository.findProjectById(id);
+        Project project = projectRepository.findProjectById(id);
+        Session session = entityManager.unwrap(Session.class);
+        session.evict(project);
+        return project;
     }
 
     @Override

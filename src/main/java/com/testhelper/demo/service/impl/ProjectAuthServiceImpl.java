@@ -24,7 +24,7 @@ import java.util.List;
  * @Author: Xindeas
  * @Date: 2020/12/17 14:23
  */
-@Service
+@Service("ProjectAuthService")
 @Transactional(rollbackFor = Exception.class)
 public class ProjectAuthServiceImpl extends BaseServiceImpl implements ProjectAuthService {
     @Autowired

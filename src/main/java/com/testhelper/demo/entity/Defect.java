@@ -23,6 +23,8 @@ public class Defect {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     @Column(name="id", columnDefinition="流水号")
     private Long id;
+    @Column(name="project_id", columnDefinition="项目ID")
+    private Long projectId;
     @Column(name="title", columnDefinition="标题", length=255)
     private String title;
     @Column(name="defect_no", columnDefinition="缺陷编号", length=50)

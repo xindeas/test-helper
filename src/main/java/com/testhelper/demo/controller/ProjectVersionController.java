@@ -40,6 +40,17 @@ public class ProjectVersionController {
     }
 
     /**
+     * 校验版本号唯一
+     * @param projectId
+     * @param no
+     * @return
+     */
+    @GetMapping("/unique-no/{projectId}/{no}")
+    private ResultHelperPo checkUnique (@PathVariable("projectId") Long projectId, @PathVariable("no") String no, Long id) {
+        return projectVersionComponent.checkUnique(projectId, id, no);
+    }
+
+    /**
      * 修改
      * @param projectVersion
      * @return

@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @Author: Xindeas
  * @Date: 2020/12/21 11:34
  */
-@Service
+@Service("DefectCommentService")
 @Transactional(rollbackFor = Exception.class)
 public class DefectCommentServiceImpl extends BaseServiceImpl implements DefectCommentService {
     @Autowired

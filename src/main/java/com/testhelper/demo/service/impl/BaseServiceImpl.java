@@ -1,7 +1,7 @@
 package com.testhelper.demo.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.querydsl.core.types.Order;
-import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.ComparableExpressionBase;
 import com.querydsl.core.types.dsl.EntityPathBase;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -11,18 +11,26 @@ import com.testhelper.demo.po.PageHelperPo;
 import com.testhelper.demo.po.SortHelperPo;
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.StringUtils;
+import org.hibernate.Session;
+import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * @Author: Xindeas
  * @Date: 2020/12/17 14:23
  */
+@Service("BaseService")
 public class BaseServiceImpl {
+    @PersistenceContext
+    EntityManager entityManager;
     protected PageHelperPo paginationQuery(JPAQuery<?> query, PageHelperPo page) {
+        Session session = entityManager.unwrap(Session.class);
         long total = query.fetchCount();
         page.setTotalCount((int)total);
         if (page.getPagination()) {
@@ -33,6 +41,9 @@ public class BaseServiceImpl {
             page.setResult(resultList);
         } else {
             List<?> resultList = query.fetch();
+            resultList.forEach(item -> {
+                session.evict(item);
+            });
             page.setResult(resultList);
         }
         return page;
@@ -68,5 +79,14 @@ public class BaseServiceImpl {
         }
 
         return query;
+    }
+
+    public void entityCreator(String tableName) {
+        Query query = entityManager.createNativeQuery("DESCRIBE " + tableName);
+        List<Object> list = query.getResultList();
+        for (Object lo : list) {
+            List l = JSON.parseArray(JSON.toJSONString(lo));
+            System.out.println(l.get(0));
+        }
     }
 }

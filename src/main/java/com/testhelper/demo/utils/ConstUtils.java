@@ -21,13 +21,11 @@ public class ConstUtils {
         SOLVED,
         // 待发布
         WAITE_PUB,
-        // 已关闭
+        // 已关闭，发布完成
         CLOSED,
-        // 重新打开
+        // 重新打开，测试失败重新打开
         REOPEN,
-        // 测试失败
-        FAILED,
-        // 待确认
+        // 待确认，开发人员确认
         WAITE_CONFIRM
     };
 }

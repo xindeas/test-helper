@@ -68,33 +68,37 @@ public class ProjectComponent {
         return new ResultHelperPo(true, id, "");
     }
     public ResultHelperPo enable(Long id) {
-        // TODO 此处不进行复制的话在后面进行load的时候在select语句之前将会先进行一次update，具体原因未知
-        Project current = new Project();
         Project old = projectService.load(id);
-        BeanUtils.copyProperties(old, current);
         if (null == old) {
             return new ResultHelperPo(false, null, "项目不存在");
         }
         if (old.getEnabled()) {
             return new ResultHelperPo(false, null, old.getName() + "项目已启用无需再次启用");
         }
-        current.setEnabled(true);
+        old.setEnabled(true);
 
-        return new ResultHelperPo(true, projectService.save(current), "");
+        return new ResultHelperPo(true, projectService.save(old), "");
     }
     public ResultHelperPo disable(Long id) {
-        // TODO 此处不进行复制的话在后面进行load的时候在select语句之前将会先进行一次update，具体原因未知
-        Project current = new Project();
         Project old = projectService.load(id);
-        BeanUtils.copyProperties(old, current);
         if (null == old) {
             return new ResultHelperPo(false, null, "项目不存在");
         }
         if (!old.getEnabled()) {
             return new ResultHelperPo(false, null, old.getName() + "项目已禁用无需再次禁用");
         }
-        current.setEnabled(false);
+        old.setEnabled(false);
 
-        return new ResultHelperPo(true, projectService.save(current), "");
+        return new ResultHelperPo(true, projectService.save(old), "");
+    }
+    public ResultHelperPo switchVersion(Long projectId, String versionNo) {
+        Project project = projectService.load(projectId);
+        if (null != project) {
+            Project current = new Project();
+            BeanUtils.copyProperties(project, current);
+            current.setVersionNo(versionNo);
+            projectService.save(current);
+        }
+        return new ResultHelperPo(true, projectId, "");
     }
 }

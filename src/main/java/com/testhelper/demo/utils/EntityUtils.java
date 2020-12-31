@@ -43,9 +43,9 @@ public class EntityUtils {
                 Boolean oldVal = (Boolean) f.get(old);
                 Boolean newVal = (Boolean) f.get(current);
                 if (null == oldVal) {
-                    sb.append("修改了").append(columnName).append("：从空修改为【").append(newVal).append("】；");
+                    sb.append("修改了").append(columnName).append("：从空修改为【").append(specialBoolean(f.getName(), newVal)).append("】；");
                 } else if (null == newVal) {
-                    sb.append("修改了").append(columnName).append("：从【").append(oldVal).append("】修改为空；");
+                    sb.append("修改了").append(columnName).append("：从【").append(specialBoolean(f.getName(), oldVal)).append("】修改为空；");
                 } else if (!oldVal.equals(newVal)) {
                     sb.append("修改了").append(columnName).append("：从【").append(specialBoolean(f.getName(), oldVal))
                             .append("】修改为【").append(specialBoolean(f.getName(), newVal)).append("】；");

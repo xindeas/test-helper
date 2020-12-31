@@ -24,6 +24,14 @@ public interface ProjectVersionService {
     public ProjectVersion load(Long id);
 
     /**
+     * 根据项目ID和版本号查版本
+     * @param projectId
+     * @param versionNo
+     * @return
+     */
+    ProjectVersion findProjectVersionByProjectIdAndVersionNo(Long projectId, String versionNo);
+
+    /**
      * 编辑
      * @param projectVersion
      * @return

@@ -99,4 +99,15 @@ public class ProjectController {
     private ResultHelperPo disable (@PathVariable("id") Long id) {
         return projectComponent.disable(id);
     }
+
+    /**
+     * 切换版本
+     * @param projectId
+     * @param versionNo
+     * @return
+     */
+    @GetMapping("/switch-ver")
+    private ResultHelperPo switchVersion (Long projectId, String versionNo) {
+        return projectComponent.switchVersion(projectId, versionNo);
+    }
 }

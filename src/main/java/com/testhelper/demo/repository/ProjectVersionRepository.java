@@ -13,4 +13,12 @@ public interface ProjectVersionRepository extends BaseRepository<ProjectVersion,
      * @return
      */
     ProjectVersion findProjectVersionById(Long id);
+
+    /**
+     * 根据项目ID和版本号查版本
+     * @param projectId
+     * @param versionNo
+     * @return
+     */
+    ProjectVersion findProjectVersionByProjectIdAndVersionNo(Long projectId, String versionNo);
 }
