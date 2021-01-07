@@ -1,7 +1,6 @@
 package com.testhelper.demo.repository;
 
 import com.testhelper.demo.entity.Defect;
-import com.testhelper.demo.entity.Log;
 
 /**
  * @Author: Xindeas

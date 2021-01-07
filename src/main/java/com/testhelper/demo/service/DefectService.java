@@ -11,6 +11,7 @@ import com.testhelper.demo.pojo.DefectPo;
 public interface DefectService {
     /**
      * 分页查询
+     *
      * @param page 分页参数
      * @return
      */
@@ -18,6 +19,7 @@ public interface DefectService {
 
     /**
      * 根据ID加载实体
+     *
      * @param id 流水号
      * @return
      */
@@ -25,6 +27,7 @@ public interface DefectService {
 
     /**
      * 编辑
+     *
      * @param defect
      * @return
      */
@@ -32,6 +35,7 @@ public interface DefectService {
 
     /**
      * 新增
+     *
      * @param defect
      * @return
      */
@@ -39,6 +43,7 @@ public interface DefectService {
 
     /**
      * 删除
+     *
      * @param id
      */
     public void delete(Long id);
