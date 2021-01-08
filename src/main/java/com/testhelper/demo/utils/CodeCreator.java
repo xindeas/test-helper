@@ -4,11 +4,10 @@ import com.testhelper.demo.entity.SchemaColumn;
 import com.testhelper.demo.service.impl.BaseServiceImpl;
 import lombok.SneakyThrows;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileWriter;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -26,6 +25,7 @@ public class CodeCreator {
             " * @Author: Xindeas\n" +
             " * @Date: " +
             " */\n";
+    private static String tableName = "";
     private static String entityName = "";
     private static String poName = "";
     private static String serviceName = "";
@@ -33,12 +33,14 @@ public class CodeCreator {
     private static String repositoryName = "";
     private static String controllerName = "";
     private static String componentName = "";
+    private static SchemaColumn primary = null;
 
     @SneakyThrows
-    public static void entityCreator(String tableName) {
+    public static void entityCreator(String tbName) {
         BaseServiceImpl baseService = (BaseServiceImpl) SpringBeanUtils.getBean("BaseService");
-        List<SchemaColumn> list = baseService.getColumnByTable(tableName);
+        List<SchemaColumn> list = baseService.getColumnByTable(tbName);
 
+        tableName = tbName;
         entityName = getEntityName(tableName);
         poName = getEntityName(tableName) + "Po";
         serviceName = getEntityName(tableName) + "Service";
@@ -47,7 +49,6 @@ public class CodeCreator {
         controllerName = getEntityName(tableName) + "Controller";
         componentName = getEntityName(tableName) + "Component";
         // 主键
-        SchemaColumn primary = new SchemaColumn();
         for (SchemaColumn sc : list) {
             if ("pri".equalsIgnoreCase(sc.getColumnKey())) {
                 primary = sc;
@@ -72,14 +73,14 @@ public class CodeCreator {
         dir = new File("D:\\codeCreator");
         dir.mkdirs();
 
-        createEntity(tableName, list);
+        createEntity(list);
         createPo(list);
-        createRepository(primary);
-        createBaseService(primary);
-        createController(tableName, primary);
-        createComponent(primary);
-        createServiceImpl(primary, list);
-        createJsService(tableName, primary);
+        createRepository();
+        createBaseService();
+        createController();
+        createComponent();
+        createServiceImpl(list);
+        createJsService();
     }
 
     /**
@@ -103,11 +104,10 @@ public class CodeCreator {
     /**
      * 创建实体类
      *
-     * @param tableName
      * @param list
      */
     @SneakyThrows
-    public static void createEntity(String tableName, List<SchemaColumn> list) {
+    public static void createEntity(List<SchemaColumn> list) {
         StringBuilder str = new StringBuilder();
         str.append("package com.testhelper.demo.entity;\n");
         str.append("\n");
@@ -192,11 +192,9 @@ public class CodeCreator {
 
     /**
      * 创建repository
-     *
-     * @param primary
      */
     @SneakyThrows
-    public static void createRepository(SchemaColumn primary) {
+    public static void createRepository() {
         StringBuilder str = new StringBuilder();
         str.append("package com.testhelper.demo.repository;\n");
         str.append("\n");
@@ -222,11 +220,9 @@ public class CodeCreator {
 
     /**
      * 创建service
-     *
-     * @param primary
      */
     @SneakyThrows
-    public static void createBaseService(SchemaColumn primary) {
+    public static void createBaseService() {
         String entiryParam = StrUtils.firstWordToLower(entityName);
         StringBuilder str = new StringBuilder();
         str.append("package com.testhelper.demo.service;\n");
@@ -297,11 +293,9 @@ public class CodeCreator {
 
     /**
      * 创建controller
-     *
-     * @param primary
      */
     @SneakyThrows
-    public static void createController(String tableName, SchemaColumn primary) {
+    public static void createController() {
         String componentParam = StrUtils.firstWordToLower(componentName);
         String entiryParam = StrUtils.firstWordToLower(entityName);
         String primaryName = StrUtils.lineLinkToLowerCamel(primary.getColumnName());
@@ -378,11 +372,9 @@ public class CodeCreator {
 
     /**
      * 创建component
-     *
-     * @param primary
      */
     @SneakyThrows
-    public static void createComponent(SchemaColumn primary) {
+    public static void createComponent() {
         String serviceParam = StrUtils.firstWordToLower(serviceName);
         String entityParam = StrUtils.firstWordToLower(entityName);
         String primaryName = StrUtils.lineLinkToLowerCamel(primary.getColumnName());
@@ -406,7 +398,7 @@ public class CodeCreator {
         str.append("     * @return\n");
         str.append("     */\n");
         str.append("    public ResultHelperPo query (PageHelperPo<").append(entityName).append(", ").append(poName).append("> page) {\n");
-        str.append("        return new ResultHelperPo(true, ").append(serviceParam).append(".query(page), \"\");");
+        str.append("        return new ResultHelperPo(true, ").append(serviceParam).append(".query(page), \"\");\n");
         str.append("    }\n");
 
         str.append("    /**\n");
@@ -415,7 +407,7 @@ public class CodeCreator {
         str.append("     * @return\n");
         str.append("     */\n");
         str.append("    public ResultHelperPo load (").append(primary.getJavaType()).append(" ").append(primaryName).append(") {\n");
-        str.append("        return new ResultHelperPo(true, ").append(serviceParam).append(".load(id), \"\");");
+        str.append("        return new ResultHelperPo(true, ").append(serviceParam).append(".load(id), \"\");\n");
         str.append("    }\n");
 
         str.append("    /**\n");
@@ -424,10 +416,10 @@ public class CodeCreator {
         str.append("     * @return\n");
         str.append("     */\n");
         str.append("    public ResultHelperPo save (").append(entityName).append(" ").append(entityParam).append(") {\n");
-        str.append("        if (null == ").append(entityParam).append(".getId()) {");
-        str.append("            return new ResultHelperPo(false, ").append(entityParam).append(", \"修改异常\");");
-        str.append("        }");
-        str.append("        return new ResultHelperPo(true, ").append(serviceParam).append(".save(").append(entityParam).append("), \"\");");
+        str.append("        if (null == ").append(entityParam).append(".getId()) {\n");
+        str.append("            return new ResultHelperPo(false, ").append(entityParam).append(", \"修改异常\");\n");
+        str.append("        }\n");
+        str.append("        return new ResultHelperPo(true, ").append(serviceParam).append(".save(").append(entityParam).append("), \"\");\n");
         str.append("    }\n");
 
         str.append("    /**\n");
@@ -436,10 +428,10 @@ public class CodeCreator {
         str.append("     * @return\n");
         str.append("     */\n");
         str.append("    public ResultHelperPo add (").append(entityName).append(" ").append(entityParam).append(") {\n");
-        str.append("        if (null == ").append(entityParam).append(".getId()) {");
-        str.append("            return new ResultHelperPo(false, ").append(entityParam).append(", \"新增异常\");");
-        str.append("        }");
-        str.append("        return new ResultHelperPo(true, ").append(serviceParam).append(".add(").append(entityParam).append("), \"\");");
+        str.append("        if (null != ").append(entityParam).append(".getId()) {\n");
+        str.append("            return new ResultHelperPo(false, ").append(entityParam).append(", \"新增异常\");\n");
+        str.append("        }\n");
+        str.append("        return new ResultHelperPo(true, ").append(serviceParam).append(".add(").append(entityParam).append("), \"\");\n");
         str.append("    }\n");
 
         str.append("    /**\n");
@@ -448,8 +440,8 @@ public class CodeCreator {
         str.append("     * @return\n");
         str.append("     */\n");
         str.append("    public ResultHelperPo delete (").append(primary.getJavaType()).append(" ").append(primaryName).append(") {\n");
-        str.append("        ").append(serviceParam).append(".delete(").append(primaryName).append(");");
-        str.append("        return new ResultHelperPo(true, ").append(primaryName).append(", \"\");");
+        str.append("        ").append(serviceParam).append(".delete(").append(primaryName).append(");\n");
+        str.append("        return new ResultHelperPo(true, ").append(primaryName).append(", \"\");\n");
         str.append("    }\n");
 
         str.append("}\n");
@@ -458,14 +450,15 @@ public class CodeCreator {
 
     /**
      * 创建serviceImpl
-     * @param primary
+     *
      * @param list
      */
     @SneakyThrows
-    public static void createServiceImpl(SchemaColumn primary, List<SchemaColumn> list) {
+    public static void createServiceImpl(List<SchemaColumn> list) {
         String entityParam = StrUtils.firstWordToLower(entityName);
         String repositoryParam = StrUtils.firstWordToLower(repositoryName);
         String primaryName = StrUtils.lineLinkToLowerCamel(primary.getColumnName());
+        String primaryNameUpper = StrUtils.firstWordToUpper(primaryName);
         StringBuilder str = new StringBuilder();
         str.append("package com.testhelper.demo.service.impl;\n");
         str.append("import com.querydsl.core.BooleanBuilder;\n");
@@ -473,6 +466,10 @@ public class CodeCreator {
         str.append("import com.querydsl.jpa.impl.JPAQueryFactory;\n");
         str.append("import com.testhelper.demo.po.PageHelperPo;\n");
         str.append("import org.apache.commons.lang3.StringUtils;\n");
+        str.append("import com.testhelper.demo.utils.LogUtils;\n");
+        str.append("import com.testhelper.demo.utils.EntityUtils;\n");
+        str.append("import java.util.Date;\n");
+        str.append("import org.hibernate.Session;\n");
         str.append("import org.springframework.beans.factory.annotation.Autowired;\n");
         str.append("import org.springframework.stereotype.Service;\n");
         str.append("import org.springframework.transaction.annotation.Transactional;\n");
@@ -498,7 +495,7 @@ public class CodeCreator {
                 .append(entityName)
                 .append(", ")
                 .append(poName)
-                .append("> page) {");
+                .append("> page) {\n");
         str.append("        if (null == page) {\n");
         str.append("            return null;\n");
         str.append("        }\n");
@@ -514,24 +511,43 @@ public class CodeCreator {
 
         str.append("    @Override\n");
         str.append("    public ").append(entityName).append(" load(").append(primary.getJavaType()).append(" ").append(primaryName).append(") {\n");
-        str.append("        return ").append(repositoryParam).append(".find").append(entityName).append("By")
-                .append(StrUtils.lineLinkToUpperCamel(primary.getColumnName())).append("(").append(primaryName).append(");\n");
+        str.append("        ").append(entityName).append(" ").append(entityParam).append(" = ")
+                .append(repositoryParam).append(".find").append(entityName).append("By")
+                .append(primaryNameUpper).append("(").append(primaryName).append(");\n");
+        str.append("        Session session = entityManager.unwrap(Session.class);\n");
+        str.append("        session.evict(").append(entityParam).append(");\n");
+        str.append("        return ").append(entityParam).append(";\n");
         str.append("    }\n");
 
         str.append("    @Override\n");
         str.append("    public ").append(entityName).append(" save(").append(entityName).append(" ").append(entityParam).append(") {\n");
+        str.append("        ").append(entityName).append(" old = ").append(repositoryParam).append(".find").append(entityName).append("By")
+                .append(primaryNameUpper).append("(").append(entityParam).append(".get").append(primaryNameUpper).append("());\n");
+        str.append("\n");
+        str.append("        String msg = EntityUtils.compareEntity(old, ").append(entityParam).append(");\n");
+        str.append("        if (StringUtils.isNotBlank(msg)) {\n");
+        str.append("            LogUtils.log(\"").append(tableName).append("\", ").append(entityParam).append(".get").append(primaryNameUpper).append("(), msg, \"admin\");\n");
+        str.append("        }\n");
+        str.append("        ").append(entityParam).append(".setModifyBy(\"admin\");\n");
+        str.append("        ").append(entityParam).append(".setModifyDate(new Date());\n");
         str.append("        return ").append(repositoryParam).append(".save(").append(entityParam).append(");\n");
         str.append("    }\n");
 
         str.append("    @Override\n");
         str.append("    public ").append(entityName).append(" add(").append(entityName).append(" ").append(entityParam).append(") {\n");
-        str.append("        return ").append(repositoryParam).append(".save(").append(entityParam).append(");\n");
+        str.append("        ").append(entityParam).append(".setCreateBy(\"admin\");\n");
+        str.append("        ").append(entityParam).append(".setCreateDate(new Date());\n");
+        str.append("        ").append(entityParam).append(".setModifyBy(\"admin\");\n");
+        str.append("        ").append(entityParam).append(".setModifyDate(new Date());\n");
+        str.append("        ").append(entityName).append(" p = ").append(repositoryParam).append(".save(").append(entityParam).append(");\n");
+        str.append("        LogUtils.log(\"").append(tableName).append("\", p.get").append(primaryNameUpper).append("(), \"创建一条新纪录\", \"admin\");\n");
+        str.append("        return p;\n");
         str.append("    }\n");
 
         str.append("    @Override\n");
         str.append("    public void delete(").append(primary.getJavaType()).append(" ").append(primaryName).append(") {\n");
         str.append("        ").append(repositoryParam).append(".delete").append("By")
-                .append(StrUtils.lineLinkToUpperCamel(primary.getColumnName())).append("(").append(primaryName).append(");\n");
+                .append(primaryNameUpper).append("(").append(primaryName).append(");\n");
         str.append("    }\n");
 
         str.append("    private BooleanBuilder whereCreator(").append(poName).append(" po) {\n");
@@ -560,11 +576,9 @@ public class CodeCreator {
 
     /**
      * 创建js请求文件
-     * @param tableName
-     * @param primary
      */
     @SneakyThrows
-    public static void createJsService(String tableName, SchemaColumn primary) {
+    public static void createJsService() {
         String entityParam = StrUtils.firstWordToLower(entityName);
         String primaryName = StrUtils.lineLinkToLowerCamel(primary.getColumnName());
         String baseUrl = getBaseUrl(tableName);
@@ -582,7 +596,7 @@ public class CodeCreator {
         str.append("    return instance.post('/").append(baseUrl).append("/save', ").append(entityParam).append(");\n");
         str.append("}\n");
         str.append("export function load").append(entityName).append(" (").append(primaryName).append(") {\n");
-        str.append("    return instance.post('/").append(baseUrl).append("/load/' + ").append(primaryName).append(");\n");
+        str.append("    return instance.get('/").append(baseUrl).append("/load/' + ").append(primaryName).append(");\n");
         str.append("}\n");
         createFile("D:\\codeCreator\\" + serviceName + ".js", str.toString());
     }
@@ -620,6 +634,7 @@ public class CodeCreator {
 
     /**
      * 获取基本路径
+     *
      * @param ori
      * @return
      */

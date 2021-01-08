@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS `tb_defect` (
   `defect_no` varchar(50) NOT NULL COMMENT '缺陷编号',
   `remark` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '详细描述',
   `target_ver` varchar(50) NOT NULL COMMENT '目标版本',
-  `module` varchar(50) NOT NULL COMMENT '所属模块',
+  `module_id` bigint NOT NULL COMMENT '所属模块ID',
   `assign_to` bigint NOT NULL COMMENT '指派给',
   `find_by` bigint NOT NULL COMMENT '发现人',
   `test_by` bigint NOT NULL COMMENT '跟踪测试人',
@@ -34,11 +34,16 @@ CREATE TABLE IF NOT EXISTS `tb_defect` (
   `modify_date` datetime NOT NULL COMMENT '修改时间',
   `modify_by` varchar(50) NOT NULL COMMENT '修改人',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='缺陷';
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='缺陷';
 
 -- 正在导出表  test-helper.tb_defect 的数据：~0 rows (大约)
 DELETE FROM `tb_defect`;
 /*!40000 ALTER TABLE `tb_defect` DISABLE KEYS */;
+INSERT INTO `tb_defect` (`id`, `project_id`, `title`, `defect_no`, `remark`, `target_ver`, `module_id`, `assign_to`, `find_by`, `test_by`, `status`, `create_date`, `create_by`, `modify_date`, `modify_by`) VALUES
+	(1, 12, '测试缺陷', '', '测试', '3.0.0', 1, 2, 1, 1, 'NEW', '2021-01-08 03:25:54', 'admin', '2021-01-08 03:25:54', 'admin'),
+	(2, 12, '测试2', 'df8359eda995a445b08557271a5cfcae5f', '测试', '3.0.0', 1, 2, 1, 1, 'NEW', '2021-01-08 05:17:50', 'admin', '2021-01-08 05:17:50', 'admin'),
+	(3, 12, '测试3', 'DF532542434', '测试', '3.0.0', 1, 2, 1, 1, 'NEW', '2021-01-08 05:21:01', 'admin', '2021-01-08 05:21:01', 'admin'),
+	(4, 12, '测试4', 'DF7627202101081301595', '测试最大长度测试最大长度测试最大长度测试最大长度测试最大长度测试最大长度测试最大长度测试最大长度测试最大长度测试最大长度测试最大长度测试最大长度测试最大长度测试最大长度测试最大长度测试最大长度测试最大长度测试最大长度测试最大长度测试最大长度测试最大长度测试最大长度测试最大长度测试最大长度测试最大长度测试最大长度测试最大长度测试最大长度测试最大长度测试最大长度测试最大长度测试最大长度', '3.0.0', 1, 2, 1, 1, 'NEW', '2021-01-08 05:25:59', 'admin', '2021-01-08 05:25:59', 'admin');
 /*!40000 ALTER TABLE `tb_defect` ENABLE KEYS */;
 
 -- 导出  表 test-helper.tb_defect_comment 结构
@@ -87,7 +92,7 @@ CREATE TABLE IF NOT EXISTS `tb_log` (
   `create_date` datetime NOT NULL COMMENT '操作时间',
   PRIMARY KEY (`id`),
   KEY `target_id` (`target_tb`,`target_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=56 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='操作记录';
+) ENGINE=InnoDB AUTO_INCREMENT=61 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='操作记录';
 
 -- 正在导出表  test-helper.tb_log 的数据：~48 rows (大约)
 DELETE FROM `tb_log`;
@@ -147,7 +152,12 @@ INSERT INTO `tb_log` (`id`, `target_tb`, `target_id`, `remark`, `create_by`, `cr
 	(52, 'tb_project', 13, '修改了启用状态：从【启用】修改为【禁用】；', 'admin', '2020-12-29 08:43:12'),
 	(53, 'tb_project', 13, '修改了启用状态：从【禁用】修改为【启用】；', 'admin', '2020-12-29 08:50:06'),
 	(54, 'tb_project', 13, '添加新版本7.0.1', 'admin', '2020-12-30 01:35:57'),
-	(55, 'tb_project', 12, '修改了当前版本：从【0.0.0】修改为【2.0.0】；', 'admin', '2020-12-31 07:05:33');
+	(55, 'tb_project', 12, '修改了当前版本：从【0.0.0】修改为【2.0.0】；', 'admin', '2020-12-31 07:05:33'),
+	(56, 'tb_project_module', 1, '创建一条新纪录', 'admin', '2021-01-08 02:49:59'),
+	(57, 'tb_defect', 1, '创建一条新纪录', 'admin', '2021-01-08 03:25:54'),
+	(58, 'tb_defect', 2, '创建一条新纪录', 'admin', '2021-01-08 05:17:50'),
+	(59, 'tb_defect', 3, '创建一条新纪录', 'admin', '2021-01-08 05:21:01'),
+	(60, 'tb_defect', 4, '创建一条新纪录', 'admin', '2021-01-08 05:25:59');
 /*!40000 ALTER TABLE `tb_log` ENABLE KEYS */;
 
 -- 导出  表 test-helper.tb_project 结构
@@ -196,11 +206,13 @@ CREATE TABLE IF NOT EXISTS `tb_project_module` (
   `modify_by` varchar(50) NOT NULL COMMENT '修改人',
   `modify_date` datetime NOT NULL COMMENT '修改时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='模块';
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='模块';
 
 -- 正在导出表  test-helper.tb_project_module 的数据：~0 rows (大约)
 DELETE FROM `tb_project_module`;
 /*!40000 ALTER TABLE `tb_project_module` DISABLE KEYS */;
+INSERT INTO `tb_project_module` (`id`, `project_id`, `module_name`, `create_by`, `create_date`, `modify_by`, `modify_date`) VALUES
+	(1, 12, '测试模块1', 'admin', '2021-01-08 02:49:59', 'admin', '2021-01-08 02:49:59');
 /*!40000 ALTER TABLE `tb_project_module` ENABLE KEYS */;
 
 -- 导出  表 test-helper.tb_project_version 结构

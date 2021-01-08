@@ -33,8 +33,8 @@ public class Defect {
     private String remark;
     @Column(name="target_ver", columnDefinition="目标版本", length=50)
     private String targetVer;
-    @Column(name="module", columnDefinition="模块", length=50)
-    private String module;
+    @Column(name="module_id", columnDefinition="模块ID")
+    private Long moduleId;
     @Column(name="assign_to", columnDefinition="处理人")
     private Long assignTo;
     @Column(name="find_by", columnDefinition="发现人")

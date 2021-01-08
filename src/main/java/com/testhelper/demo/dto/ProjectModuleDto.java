@@ -5,8 +5,6 @@ import com.testhelper.demo.entity.ProjectModule;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.List;
-
 /**
  * @Author: Xindeas
  * @Date: 2021/1/7 16:14
@@ -15,5 +13,5 @@ import java.util.List;
 @Setter
 public class ProjectModuleDto {
     private Project project;
-    private List<ProjectModule> projectModuleList;
+    private ProjectModule projectModule;
 }

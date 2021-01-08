@@ -36,7 +36,7 @@ public class BaseServiceImpl {
     EntityManager entityManager;
 
     protected PageHelperPo paginationQuery(JPAQuery<?> query, PageHelperPo page) {
-        Session session = entityManager.unwrap(Session.class);
+//        Session session = entityManager.unwrap(Session.class);
         long total = query.fetchCount();
         page.setTotalCount((int) total);
         if (page.getPagination()) {
@@ -47,9 +47,9 @@ public class BaseServiceImpl {
             page.setResult(resultList);
         } else {
             List<?> resultList = query.fetch();
-            resultList.forEach(item -> {
-                session.evict(item);
-            });
+//            resultList.forEach(item -> {
+//                session.evict(item);
+//            });
             page.setResult(resultList);
         }
         entityManager.clear();

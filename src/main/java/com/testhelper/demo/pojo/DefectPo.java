@@ -18,7 +18,7 @@ public class DefectPo {
     private String defectNo;
     private String remark;
     private String targetVer;
-    private String module;
+    private Long moduleId;
     private Long assignTo;
     private Long findBy;
     private Long testBy;
