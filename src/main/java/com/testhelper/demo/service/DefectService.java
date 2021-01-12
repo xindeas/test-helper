@@ -1,5 +1,6 @@
 package com.testhelper.demo.service;
 
+import com.testhelper.demo.dto.DefectDto;
 import com.testhelper.demo.entity.Defect;
 import com.testhelper.demo.po.PageHelperPo;
 import com.testhelper.demo.pojo.DefectPo;
@@ -15,7 +16,7 @@ public interface DefectService {
      * @param page 分页参数
      * @return
      */
-    public PageHelperPo<Defect, DefectPo> query(PageHelperPo<Defect, DefectPo> page);
+    public PageHelperPo<DefectDto, DefectPo> query(PageHelperPo<DefectDto, DefectPo> page);
 
     /**
      * 根据ID加载实体

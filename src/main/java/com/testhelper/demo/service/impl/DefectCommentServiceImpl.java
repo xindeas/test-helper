@@ -3,26 +3,36 @@ package com.testhelper.demo.service.impl;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.testhelper.demo.dto.DefectCommentDto;
 import com.testhelper.demo.entity.DefectComment;
 import com.testhelper.demo.entity.QDefectComment;
+import com.testhelper.demo.entity.User;
 import com.testhelper.demo.po.PageHelperPo;
 import com.testhelper.demo.pojo.DefectCommentPo;
 import com.testhelper.demo.repository.DefectCommentRepository;
+import com.testhelper.demo.repository.UserRepository;
 import com.testhelper.demo.service.DefectCommentService;
+import com.testhelper.demo.utils.EntityUtils;
+import com.testhelper.demo.utils.LogUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
+
 /**
  * @Author: Xindeas
- * @Date: 2020/12/21 11:34
+ * @Date:
  */
 @Service("DefectCommentService")
 @Transactional(rollbackFor = Exception.class)
 public class DefectCommentServiceImpl extends BaseServiceImpl implements DefectCommentService {
     @Autowired
     private DefectCommentRepository defectCommentRepository;
+    @Autowired
+    private UserRepository userRepository;
     @Autowired
     JPAQueryFactory queryFactory;
 
@@ -32,10 +42,8 @@ public class DefectCommentServiceImpl extends BaseServiceImpl implements DefectC
             return null;
         }
         QDefectComment qClass = QDefectComment.defectComment;
-
         DefectCommentPo po = page.getFilter();
         BooleanBuilder builder = whereCreator(po);
-
         JPAQuery<DefectComment> query = queryFactory
                 .selectFrom(qClass)
                 .where(builder);
@@ -45,50 +53,70 @@ public class DefectCommentServiceImpl extends BaseServiceImpl implements DefectC
 
     @Override
     public DefectComment load(Long id) {
-        return defectCommentRepository.findDefectCommentById(id);
+        DefectComment defectComment = defectCommentRepository.findDefectCommentById(id);
+        Session session = entityManager.unwrap(Session.class);
+        session.evict(defectComment);
+        return defectComment;
     }
 
     @Override
     public DefectComment save(DefectComment defectComment) {
+        DefectComment old = defectCommentRepository.findDefectCommentById(defectComment.getId());
+
+        String msg = EntityUtils.compareEntity(old, defectComment);
+        if (StringUtils.isNotBlank(msg)) {
+            LogUtils.log("tb_defect_comment", defectComment.getId(), msg, "admin");
+        }
+        defectComment.setModifyBy("admin");
+        defectComment.setModifyDate(new Date());
         return defectCommentRepository.save(defectComment);
     }
 
     @Override
-    public DefectComment add(DefectComment defectComment) {
-        return defectCommentRepository.save(defectComment);
+    public DefectCommentDto add(DefectCommentDto dto) {
+        DefectComment dc = dto.getDefectComment();
+        DefectComment p = defectCommentRepository.save(dc);
+        dto.setDefectComment(p);
+        User user = userRepository.findUserById(dc.getUserId());
+        LogUtils.log("tb_defect", p.getDefectId(), user.getName() + "评论说：" + p.getRemark(), "admin");
+        return dto;
     }
 
     @Override
     public void delete(Long id) {
         defectCommentRepository.deleteById(id);
     }
+
     private BooleanBuilder whereCreator(DefectCommentPo po) {
         BooleanBuilder builder = new BooleanBuilder();
         if (null != po) {
             QDefectComment qClass = QDefectComment.defectComment;
-            if (null != po.getId()) {
-                builder.and(qClass.id.eq(po.getId()));
-            }
-            if (null != po.getDefectId()) {
-                builder.and(qClass.defectId.eq(po.getDefectId()));
-            }
-            if (null != po.getUserId()) {
-                builder.and(qClass.userId.eq(po.getUserId()));
-            }
-            if (StringUtils.isNotBlank(po.getRemark())) {
-                builder.and(qClass.remark.eq(po.getRemark()));
-            }
             if (StringUtils.isNotBlank(po.getCreateBy())) {
                 builder.and(qClass.createBy.eq(po.getCreateBy()));
             }
             if (null != po.getCreateDate()) {
                 builder.and(qClass.createDate.eq(po.getCreateDate()));
             }
-            if (null != po.getModifyDate()) {
-                builder.and(qClass.modifyDate.eq(po.getModifyDate()));
+            if (null != po.getDefectId()) {
+                builder.and(qClass.defectId.eq(po.getDefectId()));
+            }
+            if (null != po.getId()) {
+                builder.and(qClass.id.eq(po.getId()));
             }
             if (StringUtils.isNotBlank(po.getModifyBy())) {
                 builder.and(qClass.modifyBy.eq(po.getModifyBy()));
+            }
+            if (null != po.getModifyDate()) {
+                builder.and(qClass.modifyDate.eq(po.getModifyDate()));
+            }
+            if (null != po.getReactCommentId()) {
+                builder.and(qClass.reactCommentId.eq(po.getReactCommentId()));
+            }
+            if (StringUtils.isNotBlank(po.getRemark())) {
+                builder.and(qClass.remark.eq(po.getRemark()));
+            }
+            if (null != po.getUserId()) {
+                builder.and(qClass.userId.eq(po.getUserId()));
             }
         }
         return builder;

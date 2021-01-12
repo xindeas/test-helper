@@ -1,23 +1,25 @@
 package com.testhelper.demo.pojo;
 
-import lombok.Getter;
-import lombok.Setter;
 
+import lombok.Setter;
+import lombok.Getter;
+
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * @Author: Xindeas
- * @Date: 2020/12/21 9:25
- */
-@Getter
+ * @Date:  */
 @Setter
-public class DefectCommentPo {
+@Getter
+public class DefectCommentPo implements Serializable {
     private Long id;
-    private Long defectId;
-    private Long userId;
-    private String remark;
-    private Date createDate;
     private String createBy;
-    private Date modifyDate;
+    private Date createDate;
+    private Long defectId;
     private String modifyBy;
+    private Date modifyDate;
+    private Long reactCommentId;
+    private String remark;
+    private Long userId;
 }

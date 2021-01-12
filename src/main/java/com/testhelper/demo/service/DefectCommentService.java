@@ -1,5 +1,6 @@
 package com.testhelper.demo.service;
 
+import com.testhelper.demo.dto.DefectCommentDto;
 import com.testhelper.demo.entity.DefectComment;
 import com.testhelper.demo.entity.DefectComment;
 import com.testhelper.demo.po.PageHelperPo;
@@ -37,7 +38,7 @@ public interface DefectCommentService {
      * @param defectComment
      * @return
      */
-    public DefectComment add(DefectComment defectComment);
+    public DefectCommentDto add(DefectCommentDto defectComment);
 
     /**
      * 删除

@@ -1,11 +1,13 @@
 package com.testhelper.demo.repository;
 
 import com.testhelper.demo.entity.ProjectVersion;
+import org.springframework.stereotype.Repository;
 
 /**
  * @Author: Xindeas
  * @Date: 2020/12/21 10:02
  */
+@Repository
 public interface ProjectVersionRepository extends BaseRepository<ProjectVersion, Long> {
     /**
      * 根据ID加载实体

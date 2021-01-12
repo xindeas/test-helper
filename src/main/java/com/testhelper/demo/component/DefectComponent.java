@@ -1,5 +1,6 @@
 package com.testhelper.demo.component;
 
+import com.testhelper.demo.dto.DefectDto;
 import com.testhelper.demo.entity.Defect;
 import com.testhelper.demo.po.PageHelperPo;
 import com.testhelper.demo.po.ResultHelperPo;
@@ -17,7 +18,7 @@ public class DefectComponent {
     @Autowired
     private DefectService defectService;
 
-    public ResultHelperPo query(PageHelperPo<Defect, DefectPo> page) {
+    public ResultHelperPo query(PageHelperPo<DefectDto, DefectPo> page) {
         return new ResultHelperPo(true, defectService.query(page), "");
     }
 

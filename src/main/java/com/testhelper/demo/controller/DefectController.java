@@ -1,6 +1,7 @@
 package com.testhelper.demo.controller;
 
 import com.testhelper.demo.component.DefectComponent;
+import com.testhelper.demo.dto.DefectDto;
 import com.testhelper.demo.entity.Defect;
 import com.testhelper.demo.po.PageHelperPo;
 import com.testhelper.demo.po.ResultHelperPo;
@@ -25,7 +26,7 @@ public class DefectController {
      * @return
      */
     @PostMapping("/query")
-    private ResultHelperPo query (@RequestBody PageHelperPo<Defect, DefectPo> page) {
+    private ResultHelperPo query (@RequestBody PageHelperPo<DefectDto, DefectPo> page) {
         return defectComponent.query(page);
     }
 

@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @Author: Xindeas
@@ -17,12 +18,12 @@ public class DefectPo {
     private String title;
     private String defectNo;
     private String remark;
-    private String targetVer;
-    private Long moduleId;
-    private Long assignTo;
-    private Long findBy;
-    private Long testBy;
-    private String status;
+    private List<String> targetVer;
+    private List<Long> moduleId;
+    private List<Long> assignTo;
+    private List<Long> findBy;
+    private List<Long> testBy;
+    private List<String> status;
     private Date createDate;
     private String createBy;
     private Date modifyDate;

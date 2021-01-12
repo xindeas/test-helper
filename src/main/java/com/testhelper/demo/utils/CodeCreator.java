@@ -200,8 +200,10 @@ public class CodeCreator {
         str.append("\n");
         str.append("\n");
         str.append("import com.testhelper.demo.entity.").append(entityName).append(";\n");
+        str.append("import org.springframework.stereotype.Repository;\n");
         str.append("\n");
         str.append(authorSign);
+        str.append("@Repository\n");
         str.append("public interface ").append(repositoryName).append(" extends BaseRepository<").append(entityName).append(", ").append(primary.getJavaType()).append("> {\n");
         str.append("\n");
         str.append("    /**\n");
