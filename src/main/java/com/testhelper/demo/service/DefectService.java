@@ -32,7 +32,7 @@ public interface DefectService {
      * @param defect
      * @return
      */
-    public Defect save(Defect defect);
+    public Defect save(Defect defect, String userLogin);
 
     /**
      * 新增
@@ -40,7 +40,7 @@ public interface DefectService {
      * @param defect
      * @return
      */
-    public Defect add(Defect defect);
+    public Defect add(Defect defect, String userLogin);
 
     /**
      * 删除

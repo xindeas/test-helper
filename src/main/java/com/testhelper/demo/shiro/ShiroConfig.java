@@ -121,20 +121,20 @@ public class ShiroConfig {
     public ShiroFilterFactoryBean shiroFilterFactoryBean(DefaultWebSecurityManager securityManager) {
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
         shiroFilterFactoryBean.setSecurityManager(securityManager);
-        Map<String, String> map = new HashMap<String, String>(1);
+        Map<String, String> map = new HashMap<String, String>(2);
         //对所有用户认证
-        map.put("/**", "anon");
+        map.put("/user/login", "anon");
+        map.put("/user/logout", "anon");
+        map.put("/**", "authc");
         //登录
-        shiroFilterFactoryBean.setLoginUrl("/Login");
+        shiroFilterFactoryBean.setLoginUrl("http://www.baidu.com");
         //首页
-        shiroFilterFactoryBean.setSuccessUrl("/Home");
+//        shiroFilterFactoryBean.setSuccessUrl("/Home");
         //错误页面，认证不通过跳转
         shiroFilterFactoryBean.setUnauthorizedUrl("http://www.baidu.com");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(map);
         //自定义过滤器
-        Map<String, Filter> filterMap = new LinkedHashMap<>();
-        filterMap.put("corsAuthenticationFilter", corsAuthenticationFilter());
-        shiroFilterFactoryBean.setFilters(filterMap);
+        shiroFilterFactoryBean.getFilters().put("authc", corsAuthenticationFilter());
         return shiroFilterFactoryBean;
     }
     /**

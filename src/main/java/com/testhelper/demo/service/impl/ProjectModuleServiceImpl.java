@@ -62,26 +62,26 @@ public class ProjectModuleServiceImpl extends BaseServiceImpl implements Project
     }
 
     @Override
-    public ProjectModule save(ProjectModule projectModule) {
+    public ProjectModule save(ProjectModule projectModule, String userLogin) {
         ProjectModule old = projectModuleRepository.findProjectModuleById(projectModule.getId());
 
         String msg = EntityUtils.compareEntity(old, projectModule);
         if (StringUtils.isNotBlank(msg)) {
-            LogUtils.log("tb_project_module", projectModule.getId(), msg, "admin");
+            LogUtils.log("tb_project_module", projectModule.getId(), msg, userLogin);
         }
-        projectModule.setModifyBy("admin");
+        projectModule.setModifyBy(userLogin);
         projectModule.setModifyDate(new Date());
         return projectModuleRepository.save(projectModule);
     }
 
     @Override
-    public ProjectModule add(ProjectModule projectModule) {
-        projectModule.setCreateBy("admin");
+    public ProjectModule add(ProjectModule projectModule, String userLogin) {
+        projectModule.setCreateBy(userLogin);
         projectModule.setCreateDate(new Date());
-        projectModule.setModifyBy("admin");
+        projectModule.setModifyBy(userLogin);
         projectModule.setModifyDate(new Date());
         ProjectModule p = projectModuleRepository.save(projectModule);
-        LogUtils.log("tb_project_module", p.getId(), "创建一条新纪录", "admin");
+        LogUtils.log("tb_project_module", p.getId(), "创建一条新纪录", userLogin);
         return p;
     }
 

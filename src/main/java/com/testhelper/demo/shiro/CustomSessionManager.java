@@ -12,12 +12,11 @@ import javax.servlet.ServletResponse;
 import java.io.Serializable;
 
 /**
+ * 自定义缓存设置
  * @Author: Xindeas
  * @Date: 2020/12/17 14:23
  */
 public class CustomSessionManager extends DefaultWebSessionManager {
-
-    private static final Logger logger = LoggerFactory.getLogger(CustomSessionManager.class);
 
     private static final String AUTHORIZATION = "Authorization";
 

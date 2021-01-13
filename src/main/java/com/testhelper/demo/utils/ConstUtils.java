@@ -6,8 +6,12 @@ package com.testhelper.demo.utils;
  * @Date: 2020/12/17 14:23
  */
 public class ConstUtils {
-    public static final String CODE_200 = "200";
-    public static final String CODE_500 = "500";
+    // 成功码
+    public static final String CODE_SUCCESS = "200";
+    // 失败码
+    public static final String CODE_FAILD = "500";
+    // 登录过期
+    public static final String CODE_EXPIRED = "501";
 
     /**
      * 缺陷状态

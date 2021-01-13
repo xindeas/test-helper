@@ -28,14 +28,14 @@ public interface DefectCommentAtService {
      * @param defectCommentAt
      * @return
      */
-    public DefectCommentAt save(DefectCommentAt defectCommentAt);
+    public DefectCommentAt save(DefectCommentAt defectCommentAt, String userLogin);
 
     /**
      * 新增
      * @param defectCommentAt
      * @return
      */
-    public DefectCommentAt add(DefectCommentAt defectCommentAt);
+    public DefectCommentAt add(DefectCommentAt defectCommentAt, String userLogin);
 
     /**
      * 删除

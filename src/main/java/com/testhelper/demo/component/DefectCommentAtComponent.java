@@ -1,10 +1,12 @@
 package com.testhelper.demo.component;
 
 import com.testhelper.demo.entity.DefectCommentAt;
+import com.testhelper.demo.entity.User;
 import com.testhelper.demo.po.PageHelperPo;
 import com.testhelper.demo.po.ResultHelperPo;
 import com.testhelper.demo.pojo.DefectCommentAtPo;
 import com.testhelper.demo.service.DefectCommentAtService;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -28,13 +30,15 @@ public class DefectCommentAtComponent {
         if (null == defectCommentAt.getId()) {
             return new ResultHelperPo(false, defectCommentAt, "修改异常");
         }
-        return new ResultHelperPo(true, defectCommentAtService.save(defectCommentAt), "");
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        return new ResultHelperPo(true, defectCommentAtService.save(defectCommentAt, user.getLogin()), "");
     }
     public ResultHelperPo add(DefectCommentAt defectCommentAt) {
         if (null != defectCommentAt.getId()) {
             return new ResultHelperPo(false, defectCommentAt, "新增异常");
         }
-        return new ResultHelperPo(true, defectCommentAtService.add(defectCommentAt), "");
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        return new ResultHelperPo(true, defectCommentAtService.add(defectCommentAt, user.getLogin()), "");
     }
     public ResultHelperPo delete(Long id) {
         defectCommentAtService.delete(id);

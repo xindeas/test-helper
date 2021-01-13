@@ -25,8 +25,6 @@ public class UserRealm extends AuthorizingRealm {
     @Autowired(required = false)
     private UserService userService;
 
-    private final Logger logger = LoggerFactory.getLogger(UserRealm.class);
-
     /**
        * 执行授权逻辑
        *
@@ -54,7 +52,6 @@ public class UserRealm extends AuthorizingRealm {
         // 判断用户名
         UsernamePasswordToken token = (UsernamePasswordToken) arg0;
         // 编写shiro判断逻辑，判断用户名和密码
-        System.out.println("执行认证逻辑" + token.getUsername());
         User user = userService.login(token.getUsername());
         // 该用户不存在
         if (user == null) {

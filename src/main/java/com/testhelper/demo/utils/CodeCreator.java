@@ -272,7 +272,7 @@ public class CodeCreator {
         str.append("     * @param ").append(entiryParam).append("\n");
         str.append("     * @return\n");
         str.append("     */\n");
-        str.append("    public ").append(entityName).append(" save(").append(entityName).append(" ").append(entiryParam).append(");\n");
+        str.append("    public ").append(entityName).append(" save(").append(entityName).append(" ").append(entiryParam).append(", String userLogin);\n");
         str.append("\n");
         str.append("    /**\n");
         str.append("     * 新增\n");
@@ -280,7 +280,7 @@ public class CodeCreator {
         str.append("     * @param ").append(entiryParam).append("\n");
         str.append("     * @return\n");
         str.append("     */\n");
-        str.append("    public ").append(entityName).append(" add(").append(entityName).append(" ").append(entiryParam).append(");\n");
+        str.append("    public ").append(entityName).append(" add(").append(entityName).append(" ").append(entiryParam).append(", String userLogin);\n");
         str.append("\n");
         str.append("    /**\n");
         str.append("     * 删除\n");
@@ -421,7 +421,8 @@ public class CodeCreator {
         str.append("        if (null == ").append(entityParam).append(".getId()) {\n");
         str.append("            return new ResultHelperPo(false, ").append(entityParam).append(", \"修改异常\");\n");
         str.append("        }\n");
-        str.append("        return new ResultHelperPo(true, ").append(serviceParam).append(".save(").append(entityParam).append("), \"\");\n");
+        str.append("        User user = (User) SecurityUtils.getSubject().getPrincipal();");
+        str.append("        return new ResultHelperPo(true, ").append(serviceParam).append(".save(").append(entityParam).append(", user.getLogin()), \"\");\n");
         str.append("    }\n");
 
         str.append("    /**\n");
@@ -433,7 +434,8 @@ public class CodeCreator {
         str.append("        if (null != ").append(entityParam).append(".getId()) {\n");
         str.append("            return new ResultHelperPo(false, ").append(entityParam).append(", \"新增异常\");\n");
         str.append("        }\n");
-        str.append("        return new ResultHelperPo(true, ").append(serviceParam).append(".add(").append(entityParam).append("), \"\");\n");
+        str.append("        User user = (User) SecurityUtils.getSubject().getPrincipal();");
+        str.append("        return new ResultHelperPo(true, ").append(serviceParam).append(".add(").append(entityParam).append(", user.getLogin()), \"\");\n");
         str.append("    }\n");
 
         str.append("    /**\n");
@@ -522,27 +524,27 @@ public class CodeCreator {
         str.append("    }\n");
 
         str.append("    @Override\n");
-        str.append("    public ").append(entityName).append(" save(").append(entityName).append(" ").append(entityParam).append(") {\n");
+        str.append("    public ").append(entityName).append(" save(").append(entityName).append(" ").append(entityParam).append(", String userLogin) {\n");
         str.append("        ").append(entityName).append(" old = ").append(repositoryParam).append(".find").append(entityName).append("By")
                 .append(primaryNameUpper).append("(").append(entityParam).append(".get").append(primaryNameUpper).append("());\n");
         str.append("\n");
         str.append("        String msg = EntityUtils.compareEntity(old, ").append(entityParam).append(");\n");
         str.append("        if (StringUtils.isNotBlank(msg)) {\n");
-        str.append("            LogUtils.log(\"").append(tableName).append("\", ").append(entityParam).append(".get").append(primaryNameUpper).append("(), msg, \"admin\");\n");
+        str.append("            LogUtils.log(\"").append(tableName).append("\", ").append(entityParam).append(".get").append(primaryNameUpper).append("(), msg, userLogin);\n");
         str.append("        }\n");
-        str.append("        ").append(entityParam).append(".setModifyBy(\"admin\");\n");
+        str.append("        ").append(entityParam).append(".setModifyBy(userLogin);\n");
         str.append("        ").append(entityParam).append(".setModifyDate(new Date());\n");
         str.append("        return ").append(repositoryParam).append(".save(").append(entityParam).append(");\n");
         str.append("    }\n");
 
         str.append("    @Override\n");
-        str.append("    public ").append(entityName).append(" add(").append(entityName).append(" ").append(entityParam).append(") {\n");
-        str.append("        ").append(entityParam).append(".setCreateBy(\"admin\");\n");
+        str.append("    public ").append(entityName).append(" add(").append(entityName).append(" ").append(entityParam).append(", String userLogin) {\n");
+        str.append("        ").append(entityParam).append(".setCreateBy(userLogin);\n");
         str.append("        ").append(entityParam).append(".setCreateDate(new Date());\n");
-        str.append("        ").append(entityParam).append(".setModifyBy(\"admin\");\n");
+        str.append("        ").append(entityParam).append(".setModifyBy(userLogin);\n");
         str.append("        ").append(entityParam).append(".setModifyDate(new Date());\n");
         str.append("        ").append(entityName).append(" p = ").append(repositoryParam).append(".save(").append(entityParam).append(");\n");
-        str.append("        LogUtils.log(\"").append(tableName).append("\", p.get").append(primaryNameUpper).append("(), \"创建一条新纪录\", \"admin\");\n");
+        str.append("        LogUtils.log(\"").append(tableName).append("\", p.get").append(primaryNameUpper).append("(), \"创建一条新纪录\", userLogin);\n");
         str.append("        return p;\n");
         str.append("    }\n");
 

@@ -6,7 +6,6 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.testhelper.demo.entity.Project;
 import com.testhelper.demo.entity.ProjectVersion;
 import com.testhelper.demo.entity.QProjectVersion;
-import com.testhelper.demo.entity.User;
 import com.testhelper.demo.po.PageHelperPo;
 import com.testhelper.demo.pojo.ProjectVersionPo;
 import com.testhelper.demo.repository.ProjectVersionRepository;
@@ -15,7 +14,7 @@ import com.testhelper.demo.service.ProjectVersionService;
 import com.testhelper.demo.utils.EntityUtils;
 import com.testhelper.demo.utils.LogUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.shiro.SecurityUtils;
+import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -54,7 +53,10 @@ public class ProjectVersionServiceImpl extends BaseServiceImpl implements Projec
 
     @Override
     public ProjectVersion load(Long id) {
-        return projectVersionRepository.findProjectVersionById(id);
+        ProjectVersion projectVersion = projectVersionRepository.findProjectVersionById(id);
+        Session session = entityManager.unwrap(Session.class);
+        session.evict(projectVersion);
+        return projectVersion;
     }
 
     @Override
@@ -63,32 +65,31 @@ public class ProjectVersionServiceImpl extends BaseServiceImpl implements Projec
     }
 
     @Override
-    public ProjectVersion save(ProjectVersion projectVersion) {
+    public ProjectVersion save(ProjectVersion projectVersion, String userLogin) {
         ProjectVersion old = projectVersionRepository.findProjectVersionById(projectVersion.getId());
-        User user = (User) SecurityUtils.getSubject().getPrincipal();
 
         String msg = EntityUtils.compareEntity(old, projectVersion);
         if (StringUtils.isNotBlank(msg)) {
-            LogUtils.log("tb_project", projectVersion.getProjectId(), "修改" + old.getVersionNo() + "版本;" + msg, "admin");
+            LogUtils.log("tb_project", projectVersion.getProjectId(), "修改" + old.getVersionNo() + "版本;" + msg, userLogin);
         }
         Project project = projectService.load(projectVersion.getProjectId());
         if (null != project && project.getVersionNo().equals(old.getVersionNo()) && !projectVersion.getVersionNo().equals(old.getVersionNo())) {
             project.setVersionNo(projectVersion.getVersionNo());
-            projectService.save(project);
+            projectService.save(project, userLogin);
         }
-        projectVersion.setModifyBy("admin");
+        projectVersion.setModifyBy(userLogin);
         projectVersion.setModifyDate(new Date());
         return projectVersionRepository.save(projectVersion);
     }
 
     @Override
-    public ProjectVersion add(ProjectVersion projectVersion) {
-        projectVersion.setCreateBy("admin");
+    public ProjectVersion add(ProjectVersion projectVersion, String userLogin) {
+        projectVersion.setCreateBy(userLogin);
         projectVersion.setCreateDate(new Date());
-        projectVersion.setModifyBy("admin");
+        projectVersion.setModifyBy(userLogin);
         projectVersion.setModifyDate(new Date());
         ProjectVersion p = projectVersionRepository.save(projectVersion);
-        LogUtils.log("tb_project", p.getProjectId(), "添加新版本" + projectVersion.getVersionNo(), "admin");
+        LogUtils.log("tb_project", p.getProjectId(), "添加新版本" + projectVersion.getVersionNo(), userLogin);
         return p;
     }
 

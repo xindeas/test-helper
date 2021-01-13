@@ -36,16 +36,17 @@ public interface ProjectService {
     /**
      * 编辑
      * @param project
+     * @param userLogin
      * @return
      */
-    public Project save(Project project);
+    public Project save(Project project, String userLogin);
 
     /**
      * 新增
      * @param project
      * @return
      */
-    public Project add(Project project);
+    public Project add(Project project, String userLogin);
 
     /**
      * 删除

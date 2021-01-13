@@ -10,6 +10,7 @@ import com.testhelper.demo.pojo.LogPo;
 import com.testhelper.demo.repository.LogRepository;
 import com.testhelper.demo.service.LogService;
 import org.apache.commons.lang3.StringUtils;
+import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,7 +46,10 @@ public class LogServiceImpl extends BaseServiceImpl implements LogService {
 
     @Override
     public Log load(Long id) {
-        return logRepository.findLogById(id);
+        Log log = logRepository.findLogById(id);
+        Session session = entityManager.unwrap(Session.class);
+        session.evict(log);
+        return log;
     }
 
     @Override
@@ -62,6 +66,7 @@ public class LogServiceImpl extends BaseServiceImpl implements LogService {
     public void delete(Long id) {
         logRepository.deleteById(id);
     }
+
     private BooleanBuilder whereCreator(LogPo po) {
         BooleanBuilder builder = new BooleanBuilder();
         if (null != po) {

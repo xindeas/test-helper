@@ -1,12 +1,8 @@
 package com.testhelper.demo.service;
 
-import com.testhelper.demo.dto.UserDto;
 import com.testhelper.demo.entity.User;
 import com.testhelper.demo.po.PageHelperPo;
 import com.testhelper.demo.pojo.UserPo;
-import org.springframework.data.domain.Page;
-
-import java.util.List;
 
 /**
  * @Author: Xindeas

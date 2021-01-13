@@ -6,17 +6,14 @@ import com.testhelper.demo.po.PageHelperPo;
 import com.testhelper.demo.po.ResultHelperPo;
 import com.testhelper.demo.pojo.UserPo;
 import com.testhelper.demo.service.UserService;
-import com.testhelper.demo.utils.StrUtils;
+import com.testhelper.demo.utils.Base64Utils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
-import com.testhelper.demo.utils.Base64Utils;
 
 /**
  * @Author: Xindeas
@@ -34,22 +31,28 @@ public class UserComponent {
     public ResultHelperPo load(Long id) {
         return new ResultHelperPo(true, userService.load(id), "");
     }
+
     public ResultHelperPo save(User user) {
         if (null == user.getId()) {
             return new ResultHelperPo(false, user, "修改异常");
         }
+        User oper = (User) SecurityUtils.getSubject().getPrincipal();
         return new ResultHelperPo(true, userService.save(user), "");
     }
+
     public ResultHelperPo add(User user) {
         if (null != user.getId()) {
             return new ResultHelperPo(false, user, "新增异常");
         }
+        User oper = (User) SecurityUtils.getSubject().getPrincipal();
         return new ResultHelperPo(true, userService.add(user), "");
     }
+
     public ResultHelperPo delete(Long id) {
         userService.delete(id);
         return new ResultHelperPo(true, id, "");
     }
+
     public ResultHelperPo login(User user) {
         String encoded = Base64Utils.encode(user.getPwd());
         Subject subject = SecurityUtils.getSubject();
@@ -63,7 +66,11 @@ public class UserComponent {
         }
         subject.getPrincipal();
         User userData = userService.login(user.getLogin());
-        subject.getSession().setAttribute("user", userData);
-        return new ResultHelperPo(true, userData, "登陆成功");
+        UserDto dto = new UserDto();
+        dto.setUser(userData);
+        dto.setToken(subject.getSession().getId().toString());
+
+        subject.getSession().setAttribute(subject.getSession().getId().toString(), userData);
+        return new ResultHelperPo(true, dto, "登陆成功");
     }
 }

@@ -10,6 +10,7 @@ import com.testhelper.demo.pojo.UserPo;
 import com.testhelper.demo.repository.UserRepository;
 import com.testhelper.demo.service.UserService;
 import org.apache.commons.lang3.StringUtils;
+import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,7 +29,10 @@ public class UserServiceImpl extends BaseServiceImpl implements UserService {
 
     @Override
     public User load(Long id) {
-        return userRepository.findUserById(id);
+        User user = userRepository.findUserById(id);
+        Session session = entityManager.unwrap(Session.class);
+        session.evict(user);
+        return user;
     }
 
     @Override
@@ -48,7 +52,10 @@ public class UserServiceImpl extends BaseServiceImpl implements UserService {
 
     @Override
     public User login(String login) {
-        return userRepository.findByLogin(login);
+        User user = userRepository.findByLogin(login);
+        Session session = entityManager.unwrap(Session.class);
+        session.evict(user);
+        return user;
     }
 
     @Override
@@ -67,6 +74,7 @@ public class UserServiceImpl extends BaseServiceImpl implements UserService {
         query = sortCreator(qClass, UserPo.class, query, page.getSorts());
         return this.paginationQuery(query, page);
     }
+
     private BooleanBuilder whereCreator(UserPo po) {
         BooleanBuilder builder = new BooleanBuilder();
         if (null != po) {

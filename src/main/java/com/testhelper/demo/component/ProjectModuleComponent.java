@@ -1,10 +1,12 @@
 package com.testhelper.demo.component;
 
 import com.testhelper.demo.entity.ProjectModule;
+import com.testhelper.demo.entity.User;
 import com.testhelper.demo.po.PageHelperPo;
 import com.testhelper.demo.po.ResultHelperPo;
 import com.testhelper.demo.pojo.ProjectModulePo;
 import com.testhelper.demo.service.ProjectModuleService;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -47,7 +49,8 @@ public class ProjectModuleComponent {
         if (null == projectModule.getId()) {
             return new ResultHelperPo(false, projectModule, "修改异常");
         }
-        return new ResultHelperPo(true, projectModuleService.save(projectModule), "");
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        return new ResultHelperPo(true, projectModuleService.save(projectModule, user.getLogin()), "");
     }
 
     /**
@@ -60,7 +63,8 @@ public class ProjectModuleComponent {
         if (null != projectModule.getId()) {
             return new ResultHelperPo(false, projectModule, "新增异常");
         }
-        return new ResultHelperPo(true, projectModuleService.add(projectModule), "");
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        return new ResultHelperPo(true, projectModuleService.add(projectModule, user.getLogin()), "");
     }
 
     /**

@@ -1,5 +1,6 @@
 package com.testhelper.demo.dto;
 
+import com.testhelper.demo.entity.User;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,6 +13,6 @@ import java.io.Serializable;
 @Getter
 @Setter
 public class UserDto implements Serializable {
-    private Long id;
-    private String name;
+    private User user;
+    private String token;
 }

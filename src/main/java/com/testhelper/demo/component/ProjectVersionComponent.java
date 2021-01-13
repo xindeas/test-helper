@@ -1,10 +1,12 @@
 package com.testhelper.demo.component;
 
 import com.testhelper.demo.entity.ProjectVersion;
+import com.testhelper.demo.entity.User;
 import com.testhelper.demo.po.PageHelperPo;
 import com.testhelper.demo.po.ResultHelperPo;
 import com.testhelper.demo.pojo.ProjectVersionPo;
 import com.testhelper.demo.service.ProjectVersionService;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -35,13 +37,15 @@ public class ProjectVersionComponent {
         if (null == projectVersion.getId()) {
             return new ResultHelperPo(false, projectVersion, "修改异常");
         }
-        return new ResultHelperPo(true, projectVersionService.save(projectVersion), "");
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        return new ResultHelperPo(true, projectVersionService.save(projectVersion, user.getLogin()), "");
     }
     public ResultHelperPo add(ProjectVersion projectVersion) {
         if (null != projectVersion.getId()) {
             return new ResultHelperPo(false, projectVersion, "新增异常");
         }
-        return new ResultHelperPo(true, projectVersionService.add(projectVersion), "");
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        return new ResultHelperPo(true, projectVersionService.add(projectVersion, user.getLogin()), "");
     }
     public ResultHelperPo delete(Long id) {
         projectVersionService.delete(id);

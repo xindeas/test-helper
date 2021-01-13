@@ -3,21 +3,19 @@ package com.testhelper.demo.service.impl;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.testhelper.demo.entity.DefectComment;
 import com.testhelper.demo.entity.DefectCommentAt;
-import com.testhelper.demo.entity.QDefectComment;
 import com.testhelper.demo.entity.QDefectCommentAt;
 import com.testhelper.demo.po.PageHelperPo;
 import com.testhelper.demo.pojo.DefectCommentAtPo;
-import com.testhelper.demo.pojo.DefectCommentPo;
 import com.testhelper.demo.repository.DefectCommentAtRepository;
-import com.testhelper.demo.repository.DefectCommentRepository;
 import com.testhelper.demo.service.DefectCommentAtService;
-import com.testhelper.demo.service.DefectCommentService;
 import org.apache.commons.lang3.StringUtils;
+import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Date;
 
 /**
  * @Author: Xindeas
@@ -50,16 +48,23 @@ public class DefectCommentAtServiceImpl extends BaseServiceImpl implements Defec
 
     @Override
     public DefectCommentAt load(Long id) {
-        return defectCommentAtRepository.findDefectCommentAtById(id);
+        DefectCommentAt defectComment = defectCommentAtRepository.findDefectCommentAtById(id);
+        Session session = entityManager.unwrap(Session.class);
+        session.evict(defectComment);
+        return defectComment;
     }
 
     @Override
-    public DefectCommentAt save(DefectCommentAt defectCommentAt) {
+    public DefectCommentAt save(DefectCommentAt defectCommentAt, String userLogin) {
+        defectCommentAt.setCreateBy(userLogin);
+        defectCommentAt.setCreateDate(new Date());
         return defectCommentAtRepository.save(defectCommentAt);
     }
 
     @Override
-    public DefectCommentAt add(DefectCommentAt defectCommentAt) {
+    public DefectCommentAt add(DefectCommentAt defectCommentAt, String userLogin) {
+        defectCommentAt.setCreateBy(userLogin);
+        defectCommentAt.setCreateDate(new Date());
         return defectCommentAtRepository.save(defectCommentAt);
     }
 
@@ -67,6 +72,7 @@ public class DefectCommentAtServiceImpl extends BaseServiceImpl implements Defec
     public void delete(Long id) {
         defectCommentAtRepository.deleteById(id);
     }
+
     private BooleanBuilder whereCreator(DefectCommentAtPo po) {
         BooleanBuilder builder = new BooleanBuilder();
         if (null != po) {

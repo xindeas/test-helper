@@ -36,14 +36,14 @@ public interface ProjectVersionService {
      * @param projectVersion
      * @return
      */
-    public ProjectVersion save(ProjectVersion projectVersion);
+    public ProjectVersion save(ProjectVersion projectVersion, String userLogin);
 
     /**
      * 新增
      * @param projectVersion
      * @return
      */
-    public ProjectVersion add(ProjectVersion projectVersion);
+    public ProjectVersion add(ProjectVersion projectVersion, String userLogin);
 
     /**
      * 删除

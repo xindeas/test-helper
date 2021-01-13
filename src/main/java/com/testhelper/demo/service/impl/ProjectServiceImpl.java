@@ -8,7 +8,6 @@ import com.testhelper.demo.dto.ProjectDto;
 import com.testhelper.demo.entity.Project;
 import com.testhelper.demo.entity.QProject;
 import com.testhelper.demo.entity.QProjectAuth;
-import com.testhelper.demo.entity.User;
 import com.testhelper.demo.po.PageHelperPo;
 import com.testhelper.demo.pojo.ProjectPo;
 import com.testhelper.demo.repository.ProjectRepository;
@@ -16,8 +15,6 @@ import com.testhelper.demo.service.ProjectService;
 import com.testhelper.demo.utils.EntityUtils;
 import com.testhelper.demo.utils.LogUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.subject.Subject;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -43,8 +40,6 @@ public class ProjectServiceImpl extends BaseServiceImpl implements ProjectServic
         if (null == page) {
             return null;
         }
-        Subject subject = SecurityUtils.getSubject();
-        subject.getPrincipal();
         QProject qClass = QProject.project;
         QProjectAuth qAuth = QProjectAuth.projectAuth;
 
@@ -76,8 +71,8 @@ public class ProjectServiceImpl extends BaseServiceImpl implements ProjectServic
                 .on(qClass.id.eq(qAuth.projectId))
                 .where(
                         qClass.belongsTo.eq(userId)
-                        .or(qAuth.userId.eq(userId))
-                        .and(qClass.enabled.eq(true))
+                                .or(qAuth.userId.eq(userId))
+                                .and(qClass.enabled.eq(true))
                 );
         return query.fetch();
     }
@@ -91,28 +86,27 @@ public class ProjectServiceImpl extends BaseServiceImpl implements ProjectServic
     }
 
     @Override
-    public Project save(Project project) {
+    public Project save(Project project, String userLogin) {
         Project old = projectRepository.findProjectById(project.getId());
-        User user = (User) SecurityUtils.getSubject().getPrincipal();
 
         String msg = EntityUtils.compareEntity(old, project);
         if (StringUtils.isNotBlank(msg)) {
-            LogUtils.log("tb_project", project.getId(), msg, "admin");
+            LogUtils.log("tb_project", project.getId(), msg, userLogin);
         }
-        project.setModifyBy("admin");
+        project.setModifyBy(userLogin);
         project.setModifyDate(new Date());
         return projectRepository.save(project);
     }
 
     @Override
-    public Project add(Project project) {
+    public Project add(Project project, String userLogin) {
         project.setEnabled(true);
-        project.setCreateBy("admin");
+        project.setCreateBy(userLogin);
         project.setCreateDate(new Date());
-        project.setModifyBy("admin");
+        project.setModifyBy(userLogin);
         project.setModifyDate(new Date());
         Project p = projectRepository.save(project);
-        LogUtils.log("tb_project", p.getId(), "创建一条新纪录", "admin");
+        LogUtils.log("tb_project", p.getId(), "创建一条新纪录", userLogin);
         return p;
     }
 
@@ -120,6 +114,7 @@ public class ProjectServiceImpl extends BaseServiceImpl implements ProjectServic
     public void delete(Long id) {
         projectRepository.deleteById(id);
     }
+
     private BooleanBuilder whereCreator(ProjectPo po) {
         BooleanBuilder builder = new BooleanBuilder();
         if (null != po) {

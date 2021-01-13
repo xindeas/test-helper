@@ -17,7 +17,7 @@ public class ResultHelperPo {
     private Boolean success;
     public ResultHelperPo(Boolean success, Object result, String msg) {
         this.success = success;
-        this.code = this.success ? ConstUtils.CODE_200 : ConstUtils.CODE_500;
+        this.code = this.success ? ConstUtils.CODE_SUCCESS : ConstUtils.CODE_FAILD;
         this.result = result;
         this.msg = msg;
     }

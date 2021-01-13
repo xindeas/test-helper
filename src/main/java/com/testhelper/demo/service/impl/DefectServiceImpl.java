@@ -64,29 +64,29 @@ public class DefectServiceImpl extends BaseServiceImpl implements DefectService 
     }
 
     @Override
-    public Defect save(Defect defect) {
+    public Defect save(Defect defect, String userLogin) {
         Defect old = defectRepository.findDefectById(defect.getId());
 
         String msg = EntityUtils.compareEntity(old, defect);
         if (StringUtils.isNotBlank(msg)) {
-            LogUtils.log("tb_defect", defect.getId(), msg, "admin");
+            LogUtils.log("tb_defect", defect.getId(), msg, userLogin);
         }
-        defect.setModifyBy("admin");
+        defect.setModifyBy(userLogin);
         defect.setModifyDate(new Date());
         return defectRepository.save(defect);
     }
 
     @Override
-    public Defect add(Defect defect) {
+    public Defect add(Defect defect, String userLogin) {
         String defectNo = NoUtils.getOrderNoPureNumber("DF");
 
         defect.setDefectNo(defectNo);
-        defect.setCreateBy("admin");
+        defect.setCreateBy(userLogin);
         defect.setCreateDate(new Date());
-        defect.setModifyBy("admin");
+        defect.setModifyBy(userLogin);
         defect.setModifyDate(new Date());
         Defect p = defectRepository.save(defect);
-        LogUtils.log("tb_defect", p.getId(), "创建一条新纪录", "admin");
+        LogUtils.log("tb_defect", p.getId(), "创建一条新纪录", userLogin);
         return p;
     }
 

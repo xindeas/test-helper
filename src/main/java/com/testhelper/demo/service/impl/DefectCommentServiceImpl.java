@@ -60,25 +60,29 @@ public class DefectCommentServiceImpl extends BaseServiceImpl implements DefectC
     }
 
     @Override
-    public DefectComment save(DefectComment defectComment) {
+    public DefectComment save(DefectComment defectComment, String userLogin) {
         DefectComment old = defectCommentRepository.findDefectCommentById(defectComment.getId());
 
         String msg = EntityUtils.compareEntity(old, defectComment);
         if (StringUtils.isNotBlank(msg)) {
-            LogUtils.log("tb_defect_comment", defectComment.getId(), msg, "admin");
+            LogUtils.log("tb_defect_comment", defectComment.getId(), msg, userLogin);
         }
-        defectComment.setModifyBy("admin");
+        defectComment.setModifyBy(userLogin);
         defectComment.setModifyDate(new Date());
         return defectCommentRepository.save(defectComment);
     }
 
     @Override
-    public DefectCommentDto add(DefectCommentDto dto) {
+    public DefectCommentDto add(DefectCommentDto dto, String userLogin) {
         DefectComment dc = dto.getDefectComment();
+        dc.setCreateDate(new Date());
+        dc.setCreateBy(userLogin);
+        dc.setModifyDate(new Date());
+        dc.setModifyBy(userLogin);
         DefectComment p = defectCommentRepository.save(dc);
         dto.setDefectComment(p);
         User user = userRepository.findUserById(dc.getUserId());
-        LogUtils.log("tb_defect", p.getDefectId(), user.getName() + "评论说：" + p.getRemark(), "admin");
+        LogUtils.log("tb_defect", p.getDefectId(), user.getName() + "评论说：" + p.getRemark(), userLogin);
         return dto;
     }
 

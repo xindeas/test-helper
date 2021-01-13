@@ -6,13 +6,13 @@ import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.testhelper.demo.dto.ProjectAuthDto;
 import com.testhelper.demo.entity.ProjectAuth;
-import com.testhelper.demo.entity.QProject;
 import com.testhelper.demo.entity.QProjectAuth;
 import com.testhelper.demo.entity.QUser;
 import com.testhelper.demo.po.PageHelperPo;
 import com.testhelper.demo.pojo.ProjectAuthPo;
 import com.testhelper.demo.repository.ProjectAuthRepository;
 import com.testhelper.demo.service.ProjectAuthService;
+import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -51,7 +51,10 @@ public class ProjectAuthServiceImpl extends BaseServiceImpl implements ProjectAu
 
     @Override
     public ProjectAuth load(Long id) {
-        return projectAuthRepository.findProjectAuthById(id);
+        ProjectAuth projectAuth = projectAuthRepository.findProjectAuthById(id);
+        Session session = entityManager.unwrap(Session.class);
+        session.evict(projectAuth);
+        return projectAuth;
     }
 
     @Override
@@ -109,6 +112,7 @@ public class ProjectAuthServiceImpl extends BaseServiceImpl implements ProjectAu
     public void delete(Long id) {
         projectAuthRepository.deleteById(id);
     }
+
     private BooleanBuilder whereCreator(ProjectAuthPo po) {
         BooleanBuilder builder = new BooleanBuilder();
         if (null != po) {
