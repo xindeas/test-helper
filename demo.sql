@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS `tb_defect` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='缺陷';
 
--- 正在导出表  test-helper.tb_defect 的数据：~0 rows (大约)
+-- 正在导出表  test-helper.tb_defect 的数据：~3 rows (大约)
 DELETE FROM `tb_defect`;
 /*!40000 ALTER TABLE `tb_defect` DISABLE KEYS */;
 INSERT INTO `tb_defect` (`id`, `project_id`, `title`, `defect_no`, `remark`, `target_ver`, `module_id`, `assign_to`, `find_by`, `test_by`, `status`, `create_date`, `create_by`, `modify_date`, `modify_by`) VALUES
@@ -51,6 +51,7 @@ CREATE TABLE IF NOT EXISTS `tb_defect_comment` (
   `id` bigint NOT NULL AUTO_INCREMENT COMMENT '流水号',
   `defect_id` bigint NOT NULL COMMENT '缺陷ID',
   `user_id` bigint NOT NULL COMMENT '评论用户',
+  `react_comment_id` bigint NOT NULL COMMENT '回复的评论ID',
   `remark` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '评论内容',
   `create_date` datetime NOT NULL COMMENT '创建时间',
   `create_by` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '创建人',
@@ -268,7 +269,7 @@ CREATE TABLE IF NOT EXISTS `tb_user` (
 DELETE FROM `tb_user`;
 /*!40000 ALTER TABLE `tb_user` DISABLE KEYS */;
 INSERT INTO `tb_user` (`id`, `name`, `login`, `pwd`, `mobile`, `email`, `avatar`, `role`, `create_date`, `create_by`, `modify_date`, `modify_by`) VALUES
-	(1, '系统管理员', 'admin', 'YWRtaW4=', '17350952652', '', 'https://dss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=1091405991,859863778&fm=26&gp=0.jpg', 'SYS_ADMIN', '2020-11-03 16:36:39', 'admin', '2020-11-03 16:36:44', 'admin'),
+	(1, '系统管理员', 'admin', 'YWRtaW4=', '17350952652', '', 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1600832906858&di=7cd50963c0d55401220e02e719b38058&imgtype=0&src=http%3A%2F%2Fcdn.duitang.com%2Fuploads%2Fitem%2F201509%2F20%2F20150920002650_GTUPY.gif', 'SYS_ADMIN', '2020-11-03 16:36:39', 'admin', '2020-11-03 16:36:44', 'admin'),
 	(2, '测试1', 'test', 'YWRtaW4=', '17350952652', '', 'https://dss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=1091405991,859863778&fm=26&gp=0.jpg', 'SYS_ADMIN', '2020-12-17 10:55:44', 'admin', '2020-12-17 10:55:45', 'admin');
 /*!40000 ALTER TABLE `tb_user` ENABLE KEYS */;
 
