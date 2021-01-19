@@ -15,6 +15,7 @@ import java.util.List;
 @Setter
 public class DefectCommentDto {
     private DefectComment defectComment;
+    private DefectComment referDefectComment;
     // 评论用户
     private User user;
     private List<Long> referUserIds;

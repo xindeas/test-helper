@@ -51,7 +51,7 @@ CREATE TABLE IF NOT EXISTS `tb_defect_comment` (
   `id` bigint NOT NULL AUTO_INCREMENT COMMENT '流水号',
   `defect_id` bigint NOT NULL COMMENT '缺陷ID',
   `user_id` bigint NOT NULL COMMENT '评论用户',
-  `react_comment_id` bigint NOT NULL COMMENT '回复的评论ID',
+  `react_comment_id` bigint DEFAULT NULL COMMENT '回复的评论ID',
   `remark` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '评论内容',
   `create_date` datetime NOT NULL COMMENT '创建时间',
   `create_by` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '创建人',
@@ -59,11 +59,14 @@ CREATE TABLE IF NOT EXISTS `tb_defect_comment` (
   `modify_by` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '修改人',
   PRIMARY KEY (`id`),
   KEY `defect_id` (`defect_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='缺陷评论';
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='缺陷评论';
 
 -- 正在导出表  test-helper.tb_defect_comment 的数据：~0 rows (大约)
 DELETE FROM `tb_defect_comment`;
 /*!40000 ALTER TABLE `tb_defect_comment` DISABLE KEYS */;
+INSERT INTO `tb_defect_comment` (`id`, `defect_id`, `user_id`, `react_comment_id`, `remark`, `create_date`, `create_by`, `modify_date`, `modify_by`) VALUES
+	(1, 4, 1, NULL, '123', '2021-01-19 02:32:29', 'admin', '2021-01-19 02:32:29', 'admin'),
+	(2, 4, 1, NULL, '测试', '2021-01-19 03:35:07', 'admin', '2021-01-19 03:35:07', 'admin');
 /*!40000 ALTER TABLE `tb_defect_comment` ENABLE KEYS */;
 
 -- 导出  表 test-helper.tb_defect_comment_at 结构
@@ -93,7 +96,7 @@ CREATE TABLE IF NOT EXISTS `tb_log` (
   `create_date` datetime NOT NULL COMMENT '操作时间',
   PRIMARY KEY (`id`),
   KEY `target_id` (`target_tb`,`target_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=61 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='操作记录';
+) ENGINE=InnoDB AUTO_INCREMENT=63 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='操作记录';
 
 -- 正在导出表  test-helper.tb_log 的数据：~48 rows (大约)
 DELETE FROM `tb_log`;
@@ -158,7 +161,9 @@ INSERT INTO `tb_log` (`id`, `target_tb`, `target_id`, `remark`, `create_by`, `cr
 	(57, 'tb_defect', 1, '创建一条新纪录', 'admin', '2021-01-08 03:25:54'),
 	(58, 'tb_defect', 2, '创建一条新纪录', 'admin', '2021-01-08 05:17:50'),
 	(59, 'tb_defect', 3, '创建一条新纪录', 'admin', '2021-01-08 05:21:01'),
-	(60, 'tb_defect', 4, '创建一条新纪录', 'admin', '2021-01-08 05:25:59');
+	(60, 'tb_defect', 4, '创建一条新纪录', 'admin', '2021-01-08 05:25:59'),
+	(61, 'tb_defect', 4, '系统管理员评论说：123', 'admin', '2021-01-19 02:32:29'),
+	(62, 'tb_defect', 4, '系统管理员评论说：测试', 'admin', '2021-01-19 03:35:07');
 /*!40000 ALTER TABLE `tb_log` ENABLE KEYS */;
 
 -- 导出  表 test-helper.tb_project 结构

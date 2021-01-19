@@ -1,11 +1,14 @@
 package com.testhelper.demo.service.impl;
 
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.testhelper.demo.dto.DefectCommentDto;
+import com.testhelper.demo.dto.ProjectDto;
 import com.testhelper.demo.entity.DefectComment;
 import com.testhelper.demo.entity.QDefectComment;
+import com.testhelper.demo.entity.QUser;
 import com.testhelper.demo.entity.User;
 import com.testhelper.demo.po.PageHelperPo;
 import com.testhelper.demo.pojo.DefectCommentPo;
@@ -41,13 +44,20 @@ public class DefectCommentServiceImpl extends BaseServiceImpl implements DefectC
         if (null == page) {
             return null;
         }
-        QDefectComment qClass = QDefectComment.defectComment;
+        QDefectComment defectComment = new QDefectComment("defectComment");
+        QDefectComment referDefectComment = new QDefectComment("referDefectComment");
+        QUser user = QUser.user;
         DefectCommentPo po = page.getFilter();
         BooleanBuilder builder = whereCreator(po);
-        JPAQuery<DefectComment> query = queryFactory
-                .selectFrom(qClass)
+        JPAQuery<DefectCommentDto> query = queryFactory
+                .select(Projections.bean(DefectCommentDto.class, defectComment.as("defectComment"), user.as("user"), referDefectComment.as("referDefectComment")))
+                .from(defectComment)
+                .leftJoin(user)
+                .on(defectComment.userId.eq(user.id))
+                .leftJoin(referDefectComment)
+                .on(defectComment.reactCommentId.eq(referDefectComment.id))
                 .where(builder);
-        query = sortCreator(qClass, DefectCommentPo.class, query, page.getSorts());
+        query = sortCreator(defectComment, DefectCommentPo.class, query, page.getSorts());
         return this.paginationQuery(query, page);
     }
 
