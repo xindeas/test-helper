@@ -59,14 +59,15 @@ CREATE TABLE IF NOT EXISTS `tb_defect_comment` (
   `modify_by` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '修改人',
   PRIMARY KEY (`id`),
   KEY `defect_id` (`defect_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='缺陷评论';
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='缺陷评论';
 
--- 正在导出表  test-helper.tb_defect_comment 的数据：~0 rows (大约)
+-- 正在导出表  test-helper.tb_defect_comment 的数据：~2 rows (大约)
 DELETE FROM `tb_defect_comment`;
 /*!40000 ALTER TABLE `tb_defect_comment` DISABLE KEYS */;
 INSERT INTO `tb_defect_comment` (`id`, `defect_id`, `user_id`, `react_comment_id`, `remark`, `create_date`, `create_by`, `modify_date`, `modify_by`) VALUES
 	(1, 4, 1, NULL, '123', '2021-01-19 02:32:29', 'admin', '2021-01-19 02:32:29', 'admin'),
-	(2, 4, 1, NULL, '测试', '2021-01-19 03:35:07', 'admin', '2021-01-19 03:35:07', 'admin');
+	(2, 4, 1, NULL, '测试', '2021-01-19 03:35:07', 'admin', '2021-01-19 03:35:07', 'admin'),
+	(3, 4, 1, NULL, 'hhh', '2021-05-06 05:58:04', 'admin', '2021-05-06 05:58:04', 'admin');
 /*!40000 ALTER TABLE `tb_defect_comment` ENABLE KEYS */;
 
 -- 导出  表 test-helper.tb_defect_comment_at 结构
@@ -96,7 +97,7 @@ CREATE TABLE IF NOT EXISTS `tb_log` (
   `create_date` datetime NOT NULL COMMENT '操作时间',
   PRIMARY KEY (`id`),
   KEY `target_id` (`target_tb`,`target_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=63 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='操作记录';
+) ENGINE=InnoDB AUTO_INCREMENT=66 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='操作记录';
 
 -- 正在导出表  test-helper.tb_log 的数据：~48 rows (大约)
 DELETE FROM `tb_log`;
@@ -163,7 +164,10 @@ INSERT INTO `tb_log` (`id`, `target_tb`, `target_id`, `remark`, `create_by`, `cr
 	(59, 'tb_defect', 3, '创建一条新纪录', 'admin', '2021-01-08 05:21:01'),
 	(60, 'tb_defect', 4, '创建一条新纪录', 'admin', '2021-01-08 05:25:59'),
 	(61, 'tb_defect', 4, '系统管理员评论说：123', 'admin', '2021-01-19 02:32:29'),
-	(62, 'tb_defect', 4, '系统管理员评论说：测试', 'admin', '2021-01-19 03:35:07');
+	(62, 'tb_defect', 4, '系统管理员评论说：测试', 'admin', '2021-01-19 03:35:07'),
+	(63, 'tb_project', 13, '修改了当前版本：从【7.0.2】修改为【7.0.1】；', 'admin', '2021-05-06 05:24:22'),
+	(64, 'tb_project', 13, '修改了当前版本：从【7.0.1】修改为【7.0.2】；', 'admin', '2021-05-06 05:24:27'),
+	(65, 'tb_defect', 4, '系统管理员评论说：hhh', 'admin', '2021-05-06 05:58:04');
 /*!40000 ALTER TABLE `tb_log` ENABLE KEYS */;
 
 -- 导出  表 test-helper.tb_project 结构
@@ -186,7 +190,7 @@ DELETE FROM `tb_project`;
 /*!40000 ALTER TABLE `tb_project` DISABLE KEYS */;
 INSERT INTO `tb_project` (`id`, `name`, `belongs_to`, `version_no`, `enabled`, `create_by`, `create_date`, `modify_by`, `modify_date`) VALUES
 	(12, '测试2', 1, '2.0.0', 1, 'admin', '2020-12-22 02:15:59', 'admin', '2020-12-31 07:05:33'),
-	(13, '测试23', 1, '7.0.2', 1, 'admin', '2020-12-22 03:32:54', 'admin', '2020-12-29 08:50:06');
+	(13, '测试23', 1, '7.0.2', 1, 'admin', '2020-12-22 03:32:54', 'admin', '2021-05-06 05:24:27');
 /*!40000 ALTER TABLE `tb_project` ENABLE KEYS */;
 
 -- 导出  表 test-helper.tb_project_auth 结构
@@ -274,7 +278,7 @@ CREATE TABLE IF NOT EXISTS `tb_user` (
 DELETE FROM `tb_user`;
 /*!40000 ALTER TABLE `tb_user` DISABLE KEYS */;
 INSERT INTO `tb_user` (`id`, `name`, `login`, `pwd`, `mobile`, `email`, `avatar`, `role`, `create_date`, `create_by`, `modify_date`, `modify_by`) VALUES
-	(1, '系统管理员', 'admin', 'YWRtaW4=', '17350952652', '', 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1600832906858&di=7cd50963c0d55401220e02e719b38058&imgtype=0&src=http%3A%2F%2Fcdn.duitang.com%2Fuploads%2Fitem%2F201509%2F20%2F20150920002650_GTUPY.gif', 'SYS_ADMIN', '2020-11-03 16:36:39', 'admin', '2020-11-03 16:36:44', 'admin'),
+	(1, '系统管理员', 'admin', 'YWRtaW4=', '17350952652', '', 'http://cdn.duitang.com/uploads/item/201509/29/20150929195250_5VZzL.gif', 'SYS_ADMIN', '2020-11-03 16:36:39', 'admin', '2020-11-03 16:36:44', 'admin'),
 	(2, '测试1', 'test', 'YWRtaW4=', '17350952652', '', 'https://dss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=1091405991,859863778&fm=26&gp=0.jpg', 'SYS_ADMIN', '2020-12-17 10:55:44', 'admin', '2020-12-17 10:55:45', 'admin');
 /*!40000 ALTER TABLE `tb_user` ENABLE KEYS */;
 
