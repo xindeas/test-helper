@@ -1,8 +1,8 @@
 -- --------------------------------------------------------
 -- 主机:                           127.0.0.1
--- 服务器版本:                        8.0.22 - MySQL Community Server - GPL
+-- 服务器版本:                        8.0.26 - MySQL Community Server - GPL
 -- 服务器操作系统:                      Win64
--- HeidiSQL 版本:                  11.0.0.5919
+-- HeidiSQL 版本:                  11.3.0.6295
 -- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -10,13 +10,16 @@
 /*!50503 SET NAMES utf8mb4 */;
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 
 -- 导出 test-helper 的数据库结构
+DROP DATABASE IF EXISTS `test-helper`;
 CREATE DATABASE IF NOT EXISTS `test-helper` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `test-helper`;
 
 -- 导出  表 test-helper.tb_defect 结构
+DROP TABLE IF EXISTS `tb_defect`;
 CREATE TABLE IF NOT EXISTS `tb_defect` (
   `id` bigint NOT NULL AUTO_INCREMENT COMMENT '流水号',
   `project_id` bigint NOT NULL COMMENT '项目ID',
@@ -36,8 +39,7 @@ CREATE TABLE IF NOT EXISTS `tb_defect` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='缺陷';
 
--- 正在导出表  test-helper.tb_defect 的数据：~3 rows (大约)
-DELETE FROM `tb_defect`;
+-- 正在导出表  test-helper.tb_defect 的数据：~4 rows (大约)
 /*!40000 ALTER TABLE `tb_defect` DISABLE KEYS */;
 INSERT INTO `tb_defect` (`id`, `project_id`, `title`, `defect_no`, `remark`, `target_ver`, `module_id`, `assign_to`, `find_by`, `test_by`, `status`, `create_date`, `create_by`, `modify_date`, `modify_by`) VALUES
 	(1, 12, '测试缺陷', '', '测试', '3.0.0', 1, 2, 1, 1, 'NEW', '2021-01-08 03:25:54', 'admin', '2021-01-08 03:25:54', 'admin'),
@@ -47,6 +49,7 @@ INSERT INTO `tb_defect` (`id`, `project_id`, `title`, `defect_no`, `remark`, `ta
 /*!40000 ALTER TABLE `tb_defect` ENABLE KEYS */;
 
 -- 导出  表 test-helper.tb_defect_comment 结构
+DROP TABLE IF EXISTS `tb_defect_comment`;
 CREATE TABLE IF NOT EXISTS `tb_defect_comment` (
   `id` bigint NOT NULL AUTO_INCREMENT COMMENT '流水号',
   `defect_id` bigint NOT NULL COMMENT '缺陷ID',
@@ -61,8 +64,7 @@ CREATE TABLE IF NOT EXISTS `tb_defect_comment` (
   KEY `defect_id` (`defect_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='缺陷评论';
 
--- 正在导出表  test-helper.tb_defect_comment 的数据：~2 rows (大约)
-DELETE FROM `tb_defect_comment`;
+-- 正在导出表  test-helper.tb_defect_comment 的数据：~3 rows (大约)
 /*!40000 ALTER TABLE `tb_defect_comment` DISABLE KEYS */;
 INSERT INTO `tb_defect_comment` (`id`, `defect_id`, `user_id`, `react_comment_id`, `remark`, `create_date`, `create_by`, `modify_date`, `modify_by`) VALUES
 	(1, 4, 1, NULL, '123', '2021-01-19 02:32:29', 'admin', '2021-01-19 02:32:29', 'admin'),
@@ -71,6 +73,7 @@ INSERT INTO `tb_defect_comment` (`id`, `defect_id`, `user_id`, `react_comment_id
 /*!40000 ALTER TABLE `tb_defect_comment` ENABLE KEYS */;
 
 -- 导出  表 test-helper.tb_defect_comment_at 结构
+DROP TABLE IF EXISTS `tb_defect_comment_at`;
 CREATE TABLE IF NOT EXISTS `tb_defect_comment_at` (
   `id` bigint NOT NULL AUTO_INCREMENT COMMENT '流水号',
   `comment_id` bigint NOT NULL COMMENT '评论ID',
@@ -83,11 +86,11 @@ CREATE TABLE IF NOT EXISTS `tb_defect_comment_at` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='评论@';
 
 -- 正在导出表  test-helper.tb_defect_comment_at 的数据：~0 rows (大约)
-DELETE FROM `tb_defect_comment_at`;
 /*!40000 ALTER TABLE `tb_defect_comment_at` DISABLE KEYS */;
 /*!40000 ALTER TABLE `tb_defect_comment_at` ENABLE KEYS */;
 
 -- 导出  表 test-helper.tb_log 结构
+DROP TABLE IF EXISTS `tb_log`;
 CREATE TABLE IF NOT EXISTS `tb_log` (
   `id` bigint NOT NULL AUTO_INCREMENT COMMENT '流水号',
   `target_tb` varchar(50) NOT NULL COMMENT '操作表',
@@ -99,8 +102,7 @@ CREATE TABLE IF NOT EXISTS `tb_log` (
   KEY `target_id` (`target_tb`,`target_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=66 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='操作记录';
 
--- 正在导出表  test-helper.tb_log 的数据：~48 rows (大约)
-DELETE FROM `tb_log`;
+-- 正在导出表  test-helper.tb_log 的数据：~8 rows (大约)
 /*!40000 ALTER TABLE `tb_log` DISABLE KEYS */;
 INSERT INTO `tb_log` (`id`, `target_tb`, `target_id`, `remark`, `create_by`, `create_date`) VALUES
 	(1, 'tb_project', 3, '修改了项目名称：从123修改为测试名称；', 'admin', '2020-12-16 05:47:14'),
@@ -171,6 +173,7 @@ INSERT INTO `tb_log` (`id`, `target_tb`, `target_id`, `remark`, `create_by`, `cr
 /*!40000 ALTER TABLE `tb_log` ENABLE KEYS */;
 
 -- 导出  表 test-helper.tb_project 结构
+DROP TABLE IF EXISTS `tb_project`;
 CREATE TABLE IF NOT EXISTS `tb_project` (
   `id` bigint NOT NULL AUTO_INCREMENT COMMENT '流水号',
   `name` varchar(50) NOT NULL COMMENT '项目名称',
@@ -185,8 +188,7 @@ CREATE TABLE IF NOT EXISTS `tb_project` (
   KEY `belongs_to` (`belongs_to`)
 ) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='项目表';
 
--- 正在导出表  test-helper.tb_project 的数据：~1 rows (大约)
-DELETE FROM `tb_project`;
+-- 正在导出表  test-helper.tb_project 的数据：~2 rows (大约)
 /*!40000 ALTER TABLE `tb_project` DISABLE KEYS */;
 INSERT INTO `tb_project` (`id`, `name`, `belongs_to`, `version_no`, `enabled`, `create_by`, `create_date`, `modify_by`, `modify_date`) VALUES
 	(12, '测试2', 1, '2.0.0', 1, 'admin', '2020-12-22 02:15:59', 'admin', '2020-12-31 07:05:33'),
@@ -194,6 +196,7 @@ INSERT INTO `tb_project` (`id`, `name`, `belongs_to`, `version_no`, `enabled`, `
 /*!40000 ALTER TABLE `tb_project` ENABLE KEYS */;
 
 -- 导出  表 test-helper.tb_project_auth 结构
+DROP TABLE IF EXISTS `tb_project_auth`;
 CREATE TABLE IF NOT EXISTS `tb_project_auth` (
   `id` bigint NOT NULL AUTO_INCREMENT COMMENT '流水号',
   `project_id` bigint NOT NULL COMMENT '项目ID',
@@ -202,11 +205,11 @@ CREATE TABLE IF NOT EXISTS `tb_project_auth` (
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='项目权限';
 
 -- 正在导出表  test-helper.tb_project_auth 的数据：~0 rows (大约)
-DELETE FROM `tb_project_auth`;
 /*!40000 ALTER TABLE `tb_project_auth` DISABLE KEYS */;
 /*!40000 ALTER TABLE `tb_project_auth` ENABLE KEYS */;
 
 -- 导出  表 test-helper.tb_project_module 结构
+DROP TABLE IF EXISTS `tb_project_module`;
 CREATE TABLE IF NOT EXISTS `tb_project_module` (
   `id` bigint NOT NULL AUTO_INCREMENT COMMENT '流水号',
   `project_id` bigint NOT NULL COMMENT '项目ID',
@@ -219,13 +222,13 @@ CREATE TABLE IF NOT EXISTS `tb_project_module` (
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='模块';
 
 -- 正在导出表  test-helper.tb_project_module 的数据：~0 rows (大约)
-DELETE FROM `tb_project_module`;
 /*!40000 ALTER TABLE `tb_project_module` DISABLE KEYS */;
 INSERT INTO `tb_project_module` (`id`, `project_id`, `module_name`, `create_by`, `create_date`, `modify_by`, `modify_date`) VALUES
 	(1, 12, '测试模块1', 'admin', '2021-01-08 02:49:59', 'admin', '2021-01-08 02:49:59');
 /*!40000 ALTER TABLE `tb_project_module` ENABLE KEYS */;
 
 -- 导出  表 test-helper.tb_project_version 结构
+DROP TABLE IF EXISTS `tb_project_version`;
 CREATE TABLE IF NOT EXISTS `tb_project_version` (
   `id` bigint NOT NULL AUTO_INCREMENT COMMENT '流水号',
   `project_id` bigint NOT NULL COMMENT '项目ID',
@@ -239,8 +242,7 @@ CREATE TABLE IF NOT EXISTS `tb_project_version` (
   KEY `project_id` (`project_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='版本记录';
 
--- 正在导出表  test-helper.tb_project_version 的数据：~12 rows (大约)
-DELETE FROM `tb_project_version`;
+-- 正在导出表  test-helper.tb_project_version 的数据：~0 rows (大约)
 /*!40000 ALTER TABLE `tb_project_version` DISABLE KEYS */;
 INSERT INTO `tb_project_version` (`id`, `project_id`, `version_no`, `remark`, `create_date`, `create_by`, `modify_date`, `modify_by`) VALUES
 	(3, 12, '0.0.0', '初版', '2020-12-22 02:16:00', 'admin', '2020-12-22 02:16:00', 'admin'),
@@ -258,6 +260,7 @@ INSERT INTO `tb_project_version` (`id`, `project_id`, `version_no`, `remark`, `c
 /*!40000 ALTER TABLE `tb_project_version` ENABLE KEYS */;
 
 -- 导出  表 test-helper.tb_user 结构
+DROP TABLE IF EXISTS `tb_user`;
 CREATE TABLE IF NOT EXISTS `tb_user` (
   `id` bigint NOT NULL AUTO_INCREMENT COMMENT '流水号',
   `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '用户名',
@@ -274,8 +277,7 @@ CREATE TABLE IF NOT EXISTS `tb_user` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='用户表';
 
--- 正在导出表  test-helper.tb_user 的数据：~1 rows (大约)
-DELETE FROM `tb_user`;
+-- 正在导出表  test-helper.tb_user 的数据：~0 rows (大约)
 /*!40000 ALTER TABLE `tb_user` DISABLE KEYS */;
 INSERT INTO `tb_user` (`id`, `name`, `login`, `pwd`, `mobile`, `email`, `avatar`, `role`, `create_date`, `create_by`, `modify_date`, `modify_by`) VALUES
 	(1, '系统管理员', 'admin', 'YWRtaW4=', '17350952652', '', 'http://cdn.duitang.com/uploads/item/201509/29/20150929195250_5VZzL.gif', 'SYS_ADMIN', '2020-11-03 16:36:39', 'admin', '2020-11-03 16:36:44', 'admin'),
@@ -283,5 +285,6 @@ INSERT INTO `tb_user` (`id`, `name`, `login`, `pwd`, `mobile`, `email`, `avatar`
 /*!40000 ALTER TABLE `tb_user` ENABLE KEYS */;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
-/*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
+/*!40014 SET FOREIGN_KEY_CHECKS=IFNULL(@OLD_FOREIGN_KEY_CHECKS, 1) */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40111 SET SQL_NOTES=IFNULL(@OLD_SQL_NOTES, 1) */;
