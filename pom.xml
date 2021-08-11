@@ -14,6 +14,11 @@
     <name>demo</name>
     <description>Demo project for Spring Boot</description>
 
+    <modules>
+        <module>test-helper-generator</module>
+    </modules>
+    <packaging>pom</packaging>
+
     <properties>
         <java.version>1.8</java.version>
     </properties>
@@ -22,11 +27,13 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
+            <version>2.4.3</version>
         </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
+            <version>2.4.3</version>
             <scope>test</scope>
             <exclusions>
                 <exclusion>
@@ -46,18 +53,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
             <version>2.3.4.RELEASE</version>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/com.querydsl/querydsl-jpa -->
-        <dependency>
-            <groupId>com.querydsl</groupId>
-            <artifactId>querydsl-jpa</artifactId>
-            <version>4.3.1</version>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/com.querydsl/querydsl-apt -->
-        <dependency>
-            <groupId>com.querydsl</groupId>
-            <artifactId>querydsl-apt</artifactId>
-            <version>4.3.1</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/com.alibaba/druid-spring-boot-starter -->
@@ -120,6 +115,7 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
+            <version>2.4.2</version>
             <optional>true</optional>
         </dependency>
 
