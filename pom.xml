@@ -19,6 +19,7 @@
         <module>test-helper-admin</module>
         <module>test-helper-common</module>
     </modules>
+    <!--    修改打包类型-->
     <packaging>pom</packaging>
 
     <properties>

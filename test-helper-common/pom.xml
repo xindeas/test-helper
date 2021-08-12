@@ -11,10 +11,9 @@
     <artifactId>test-helper-common</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>test-helper-common</name>
-    <description>test-helper-common</description>
-    <properties>
-        <java.version>1.8</java.version>
-    </properties>
+    <description>公共模块</description>
+    <!--    修改打包类型-->
+    <packaging>jar</packaging>
     <dependencies>
         <!-- https://mvnrepository.com/artifact/com.querydsl/querydsl-jpa -->
         <dependency>
