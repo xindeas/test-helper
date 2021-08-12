@@ -148,7 +148,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>com.testhelper.admin.TestHelperAdminApplication</mainClass>
+                    <mainClass>TestHelperAdminApplication</mainClass>
                     <excludes>
                         <exclude>
                             <groupId>org.springframework.boot</groupId>
