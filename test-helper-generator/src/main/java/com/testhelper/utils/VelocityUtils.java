@@ -3,18 +3,24 @@ package com.testhelper.utils;
 import com.testhelper.entity.SchemaColumn;
 import com.testhelper.service.impl.TableServiceImpl;
 import lombok.SneakyThrows;
+import org.apache.commons.io.IOUtils;
+import org.apache.velocity.Template;
+import org.apache.velocity.VelocityContext;
+import org.apache.velocity.app.Velocity;
 
-import java.io.File;
-import java.io.FileWriter;
+import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Properties;
 import java.util.regex.Pattern;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 /**
  * @Author: Xindeas
  * @Date: 2020/12/17 14:23
  */
-public class CodeCreator {
+public class VelocityUtils {
     private static Pattern linePattern = Pattern.compile("_(\\w)");
 
     private static SimpleDateFormat format = new SimpleDateFormat("yyyy 年 MM 月 dd 日 E HH 点 mm 分 ss 秒");
@@ -649,4 +655,65 @@ public class CodeCreator {
         }
         return result.replaceAll("_", "-");
     }
+
+
+    public static String previewCode() {
+        initVelocity();
+        VelocityContext context = VelocityUtils.prepareContext(18, "mrdjun");
+        StringWriter sw = new StringWriter();
+        Template tpl = Velocity.getTemplate("vm/test.xml.vm", "UTF-8");
+        tpl.merge(context, sw);
+        return sw.toString();
+    }
+
+    public static byte[] downloadCode() {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        ZipOutputStream zip = new ZipOutputStream(outputStream);
+        generatorCode(zip);
+        IOUtils.closeQuietly(zip);
+        return outputStream.toByteArray();
+    }
+
+    public static void generatorCode(ZipOutputStream zip) {
+        initVelocity();
+        VelocityContext context = VelocityUtils.prepareContext(18, "mrdjun");
+
+        StringWriter sw = new StringWriter();
+        Template tpl = Velocity.getTemplate("vm/test.xml.vm", "UTF-8");
+        tpl.merge(context, sw);
+        try {
+            // 添加到zip
+            zip.putNextEntry(new ZipEntry("test.xml"));
+            IOUtils.write(sw.toString(), zip, "UTF-8");
+            IOUtils.closeQuietly(sw);
+            zip.flush();
+            zip.closeEntry();
+        } catch (IOException e) {
+            System.out.println("渲染模板失败：{0}" + e);
+        }
+
+    }
+
+    public static VelocityContext prepareContext(int age, String name) {
+        VelocityContext velocityContext = new VelocityContext();
+        velocityContext.put("age", age);
+        velocityContext.put("name", name);
+        return velocityContext;
+    }
+
+    public static void initVelocity() {
+        Properties p = new Properties();
+        try {
+            // 加载classpath目录下的vm文件
+            p.setProperty("file.resource.loader.class", "org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader");
+            // 定义字符集
+            p.setProperty(Velocity.ENCODING_DEFAULT, "UTF-8");
+            p.setProperty(Velocity.OUTPUT_ENCODING, "UTF-8");
+            // 初始化Velocity引擎，指定配置Properties
+            Velocity.init(p);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }
