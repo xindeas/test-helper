@@ -1,0 +1,20 @@
+package com.testhelper.entity;
+
+import com.testhelper.entity.${entityName};
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+/**
+ * @Author: ${author}
+ * @Date: ${dateTime}
+ */
+@Repository
+public interface ${entityName}Repository extends JpaRepository<${entityName}, ${primary.javaType}> {
+        /**
+         * 根据ID加载实体
+         *
+         * @param ${primary.columnEntityName}
+         * @return
+         */
+    ${entityName} find${entityName}By${primary.upperEntityName}(${primary.javaType} ${primary.columnEntityName});
+}

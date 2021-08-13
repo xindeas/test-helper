@@ -1,6 +1,7 @@
 package com.testhelper.repository;
 
 import com.testhelper.entity.Project;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -8,7 +9,7 @@ import org.springframework.stereotype.Repository;
  * @Date: 2020/12/17 14:23
  */
 @Repository
-public interface ProjectRepository extends org.springframework.data.jpa.repository.JpaRepository<Project, Long> {
+public interface ProjectRepository extends JpaRepository<Project, Long> {
     /**
      * 根据ID加载实体
      * @param id

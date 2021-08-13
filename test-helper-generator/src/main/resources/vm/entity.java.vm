@@ -1,0 +1,30 @@
+package com.testhelper.entity;
+
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
+import java.util.Date;
+
+/**
+ * @Author: ${author}
+ * @Date: ${dateTime}
+ */
+@Setter
+@Getter
+@Entity
+@Table(name = "${tableName}")
+public class ${entityName} {
+#foreach($i in $list)
+    #if($i.columnKey=='PRI')
+    @Id
+    /**
+     * @GeneratedValue(generator = "idGenerator")
+     * @GenericGenerator(name = "idGenerator", strategy = "uuid")
+     */
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    #end
+    @Column(name = "$i.columnName", columnDefinition = "$i.columnComment" #if($i.characterMaximumLength) , length = ${i.characterMaximumLength} #end)
+    private $i.javaType $i.columnEntityName;
+#end
+}

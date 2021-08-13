@@ -10,8 +10,7 @@ import org.apache.velocity.app.Velocity;
 
 import java.io.*;
 import java.text.SimpleDateFormat;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -79,9 +78,6 @@ public class VelocityUtils {
         dir = new File("D:\\codeCreator");
         dir.mkdirs();
 
-        createEntity(list);
-        createPo(list);
-        createRepository();
         createBaseService();
         createController();
         createComponent();
@@ -105,125 +101,6 @@ public class VelocityUtils {
             // 删除文件夹
             file.delete();
         }
-    }
-
-    /**
-     * 创建实体类
-     *
-     * @param list
-     */
-    @SneakyThrows
-    public static void createEntity(List<SchemaColumn> list) {
-        StringBuilder str = new StringBuilder();
-        str.append("package com.testhelper.admin.entity;\n");
-        str.append("\n");
-        str.append("\n");
-        str.append("import lombok.Setter;\n");
-        str.append("import lombok.Getter;\n");
-        str.append("\n");
-        str.append("import javax.persistence.*;\n");
-        str.append("import java.io.Serializable;\n");
-        str.append("import java.util.Date;\n");
-        str.append("\n");
-        str.append(authorSign);
-        str.append("@Setter\n");
-        str.append("@Getter\n");
-        str.append("@Entity\n");
-        str.append("@Table(name=\"").append(tableName).append("\")\n");
-        str.append("public class ").append(entityName).append(" implements Serializable {\n");
-
-        for (SchemaColumn column : list) {
-            if ("PRI".equalsIgnoreCase(column.getColumnKey())) {
-                str.append("    @Id\n");
-                str.append("    /**\n");
-                str.append("     * @GeneratedValue(generator = \"idGenerator\")\n");
-                str.append("     * @GenericGenerator(name = \"idGenerator\", strategy = \"uuid\")\n");
-                str.append("     */\n");
-                str.append("    @GeneratedValue(strategy=GenerationType.IDENTITY)\n");
-            }
-            str.append("    @Column(name=\"").append(column.getColumnName()).append("\"");
-            str.append(", columnDefinition=\"").append(column.getColumnComment()).append("\"");
-            if (null != column.getCharacterMaximumLength()) {
-                str.append(", length=").append(column.getCharacterMaximumLength());
-            }
-            str.append(")\n");
-            str.append("    private ")
-                    .append(column.getJavaType())
-                    .append(" ")
-                    .append(StrUtils.lineLinkToLowerCamel(column.getColumnName()))
-                    .append(";\n");
-        }
-        str.append("}\n");
-        createFile("D:\\codeCreator\\" + entityName + ".java", str.toString());
-    }
-
-    /**
-     * 创建pojo
-     *
-     * @param list
-     */
-    @SneakyThrows
-    public static void createPo(List<SchemaColumn> list) {
-        StringBuilder str = new StringBuilder();
-        str.append("package com.testhelper.admin.pojo;\n");
-        str.append("\n");
-        str.append("\n");
-        str.append("import lombok.Setter;\n");
-        str.append("import lombok.Getter;\n");
-        str.append("\n");
-        str.append("import java.io.Serializable;\n");
-        str.append("import java.util.Date;\n");
-        str.append("\n");
-        str.append(authorSign);
-        str.append("@Setter\n");
-        str.append("@Getter\n");
-        str.append("public class ").append(poName).append(" implements Serializable {\n");
-
-        for (SchemaColumn column : list) {
-            str.append("    private");
-            if ("bigint".equalsIgnoreCase(column.getDataType())) {
-                str.append(" Long ");
-            } else if ("tinyint".equalsIgnoreCase(column.getDataType())) {
-                str.append(" Boolean ");
-            } else if ("datetime".equalsIgnoreCase(column.getDataType())) {
-                str.append(" Date ");
-            } else {
-                str.append(" String ");
-            }
-            str.append(StrUtils.lineLinkToLowerCamel(column.getColumnName())).append(";\n");
-        }
-        str.append("}\n");
-        createFile("D:\\codeCreator\\" + poName + ".java", str.toString());
-    }
-
-    /**
-     * 创建repository
-     */
-    @SneakyThrows
-    public static void createRepository() {
-        StringBuilder str = new StringBuilder();
-        str.append("package com.testhelper.admin.repository;\n");
-        str.append("\n");
-        str.append("\n");
-        str.append("import com.testhelper.admin.entity.").append(entityName).append(";\n");
-        str.append("import org.springframework.stereotype.Repository;\n");
-        str.append("\n");
-        str.append(authorSign);
-        str.append("@Repository\n");
-        str.append("public interface ").append(repositoryName).append(" extends BaseRepository<").append(entityName).append(", ").append(primary.getJavaType()).append("> {\n");
-        str.append("\n");
-        str.append("    /**\n");
-        str.append("     * 根据ID加载实体\n");
-        str.append("     * @param ").append(StrUtils.lineLinkToLowerCamel(primary.getColumnName())).append("\n");
-        str.append("     * @return\n");
-        str.append("     */\n");
-        str.append("    ").append(entityName).append(" find").append(entityName).append("By")
-                .append(StrUtils.lineLinkToUpperCamel(primary.getColumnName()))
-                .append("(").append(primary.getJavaType())
-                .append(" ").append(StrUtils.lineLinkToLowerCamel(primary.getColumnName()))
-                .append(");\n");
-        str.append("}\n");
-        createFile("D:\\codeCreator\\" + repositoryName + ".java", str.toString());
     }
 
     /**
@@ -657,16 +534,17 @@ public class VelocityUtils {
     }
 
 
-    public static String previewCode() {
-        initVelocity();
-        VelocityContext context = VelocityUtils.prepareContext(18, "mrdjun");
-        StringWriter sw = new StringWriter();
-        Template tpl = Velocity.getTemplate("vm/test.xml.vm", "UTF-8");
-        tpl.merge(context, sw);
-        return sw.toString();
-    }
+    public static byte[] downloadCode(String tbName) {
 
-    public static byte[] downloadCode() {
+        tableName = tbName;
+        entityName = getEntityName(tableName);
+        poName = getEntityName(tableName) + "Po";
+        serviceName = getEntityName(tableName) + "Service";
+        serviceImplName = getEntityName(tableName) + "ServiceImpl";
+        repositoryName = getEntityName(tableName) + "Repository";
+        controllerName = getEntityName(tableName) + "Controller";
+        componentName = getEntityName(tableName) + "Component";
+
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         ZipOutputStream zip = new ZipOutputStream(outputStream);
         generatorCode(zip);
@@ -675,29 +553,75 @@ public class VelocityUtils {
     }
 
     public static void generatorCode(ZipOutputStream zip) {
-        initVelocity();
-        VelocityContext context = VelocityUtils.prepareContext(18, "mrdjun");
 
-        StringWriter sw = new StringWriter();
-        Template tpl = Velocity.getTemplate("vm/test.xml.vm", "UTF-8");
-        tpl.merge(context, sw);
+        initVelocity();
+        VelocityContext context = VelocityUtils.prepareContext();
+
+        addToZip(zip, context, "vm/entity.java.vm", entityName + ".java");
+        addToZip(zip, context, "vm/po.java.vm", poName + ".java");
+        addToZip(zip, context, "vm/repository.java.vm", repositoryName + ".java");
+        addToZip(zip, context, "vm/component.java.vm", componentName + ".java");
         try {
-            // 添加到zip
-            zip.putNextEntry(new ZipEntry("test.xml"));
-            IOUtils.write(sw.toString(), zip, "UTF-8");
-            IOUtils.closeQuietly(sw);
-            zip.flush();
             zip.closeEntry();
         } catch (IOException e) {
-            System.out.println("渲染模板失败：{0}" + e);
+            System.out.println("渲染模板失败：" + e);
         }
 
     }
 
-    public static VelocityContext prepareContext(int age, String name) {
+    /**
+     * 添加到压缩包
+     * @param zip 压缩包
+     * @param context 参数
+     * @param vmPath 模板路径
+     * @param fileName 文件名
+     */
+    public static void addToZip(ZipOutputStream zip, VelocityContext context, String vmPath, String fileName) {
+        StringWriter sw = new StringWriter();
+        Template tpl = Velocity.getTemplate(vmPath, "UTF-8");
+        tpl.merge(context, sw);
+
+        try {
+            // 添加到zip
+            zip.putNextEntry(new ZipEntry(fileName));
+            IOUtils.write(sw.toString(), zip, "UTF-8");
+            IOUtils.closeQuietly(sw);
+            zip.flush();
+        } catch (IOException e) {
+            System.out.println("渲染模板失败：" + e);
+        }
+    }
+
+    public static VelocityContext prepareContext() {
         VelocityContext velocityContext = new VelocityContext();
-        velocityContext.put("age", age);
-        velocityContext.put("name", name);
+        velocityContext.put("author", "Xindeas");
+        velocityContext.put("dateTime", format.format(new Date()));
+        velocityContext.put("tableName", tableName);
+        velocityContext.put("entityName", getEntityName(tableName));
+        velocityContext.put("lowerCamelName", StrUtils.firstWordToLower(getEntityName(tableName)));
+
+        TableServiceImpl tableService = (TableServiceImpl) SpringBeanUtils.getBean("TableService");
+        List<SchemaColumn> list = tableService.getColumnByTable(tableName);
+        // 主键
+        for (SchemaColumn sc : list) {
+            sc.setColumnEntityName(StrUtils.lineLinkToLowerCamel(sc.getColumnName()));
+            sc.setUpperEntityName(StrUtils.lineLinkToUpperCamel(sc.getColumnName()));
+            if ("pri".equalsIgnoreCase(sc.getColumnKey())) {
+                primary = sc;
+                velocityContext.put("primary", primary);
+            }
+
+            if ("bigint".equalsIgnoreCase(sc.getDataType())) {
+                sc.setJavaType("Long");
+            } else if ("tinyint".equalsIgnoreCase(sc.getDataType())) {
+                sc.setJavaType("Boolean");
+            } else if ("datetime".equalsIgnoreCase(sc.getDataType())) {
+                sc.setJavaType("Date");
+            } else {
+                sc.setJavaType("String");
+            }
+        }
+        velocityContext.put("list", list);
         return velocityContext;
     }
 

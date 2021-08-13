@@ -1,6 +1,7 @@
 package com.testhelper.repository;
 
 import com.testhelper.entity.ProjectAuth;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -10,7 +11,7 @@ import java.util.List;
  * @Date: 2020/12/17 14:23
  */
 @Repository
-public interface ProjectAuthRepository extends org.springframework.data.jpa.repository.JpaRepository<ProjectAuth, Long> {
+public interface ProjectAuthRepository extends JpaRepository<ProjectAuth, Long> {
     /**
      * 根据ID加载实体
      * @param id

@@ -1,6 +1,7 @@
 package com.testhelper.repository;
 
 import com.testhelper.entity.Defect;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -8,7 +9,7 @@ import org.springframework.stereotype.Repository;
  * @Date: 2020/12/17 15:11
  */
 @Repository
-public interface DefectRepository extends org.springframework.data.jpa.repository.JpaRepository<Defect, Long> {
+public interface DefectRepository extends JpaRepository<Defect, Long> {
     /**
      * 根据ID加载实体
      * @param id

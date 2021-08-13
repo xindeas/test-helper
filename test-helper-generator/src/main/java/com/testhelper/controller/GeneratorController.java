@@ -36,8 +36,8 @@ public class GeneratorController {
     }
 
     @RequestMapping("/download")
-    public void download(HttpServletResponse response) throws IOException {
-        byte[] data = VelocityUtils.downloadCode();
+    public void download(String tableName, HttpServletResponse response) throws IOException {
+        byte[] data = VelocityUtils.downloadCode(tableName);
         response.reset();
         response.addHeader("Access-Control-Expose-Headers", "Content-Disposition");
         response.setHeader("Content-Disposition", "attachment; filename=fun.zip");

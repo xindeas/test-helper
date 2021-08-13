@@ -12,10 +12,19 @@ import java.math.BigInteger;
 @Setter
 @Getter
 public class SchemaColumn {
+    // 字段名
     private String columnName;
+    // 字段实体名
+    private String columnEntityName;
+    // 字段实体名首字母大写
+    private String upperEntityName;
+    // 数据类型
     private String dataType;
+    // 最大长度
     private BigInteger characterMaximumLength;
+    // 是否是主键
     private String columnKey;
+    // 中文说明
     private String columnComment;
     /**
      * java类型

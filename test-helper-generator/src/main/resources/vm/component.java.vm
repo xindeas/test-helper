@@ -1,0 +1,80 @@
+package com.testhelper.component;
+
+import com.testhelper.entity.${entityName};
+import com.testhelper.entity.User;
+import com.testhelper.po.PageHelperPo;
+import com.testhelper.po.ResultHelperPo;
+import com.testhelper.pojo.${entityName}Po;
+import com.testhelper.service.${entityName}Service;
+import org.apache.shiro.SecurityUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+/**
+ * @Author: ${author}
+ * @Date: ${dateTime}
+ */
+@Component
+public class ${entityName}Component {
+    @Autowired
+    private ${entityName}Service ${lowerCamelName}service;
+
+    /**
+     * 分页查询
+     *
+     * @param page
+     * @return
+     */
+    public ResultHelperPo query(PageHelperPo<${entityName}, ${entityName}Po> page) {
+        return new ResultHelperPo(true, ${lowerCamelName}service.query(page), "");
+    }
+
+    /**
+     * 加载
+     *
+     * @param ${primary.columnEntityName}
+     * @return
+     */
+    public ResultHelperPo load(${primary.javaType} ${primary.columnEntityName}) {
+        return new ResultHelperPo(true, ${lowerCamelName}service.load(${primary.columnEntityName}), "");
+    }
+
+    /**
+     * 修改
+     *
+     * @param ${lowerCamelName}
+     * @return
+     */
+    public ResultHelperPo save(${entityName} ${lowerCamelName}) {
+        if (null == ${lowerCamelName}.get${primary.upperEntityName}()) {
+            return new ResultHelperPo(false, ${lowerCamelName}, "修改异常");
+        }
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        return new ResultHelperPo(true, ${lowerCamelName}service.save(${lowerCamelName}, user.getLogin()), "");
+    }
+
+    /**
+     * 新增
+     *
+     * @param ${lowerCamelName}
+     * @return
+     */
+    public ResultHelperPo add(${entityName} ${lowerCamelName}) {
+        if (null != ${lowerCamelName}.getId()) {
+            return new ResultHelperPo(false, ${lowerCamelName}, "新增异常");
+        }
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        return new ResultHelperPo(true, ${lowerCamelName}service.add(${lowerCamelName}, user.getLogin()), "");
+    }
+
+    /**
+     * 删除
+     *
+     * @param id
+     * @return
+     */
+    public ResultHelperPo delete(Long id) {
+        ${lowerCamelName}service.delete(id);
+        return new ResultHelperPo(true, id, "");
+    }
+}

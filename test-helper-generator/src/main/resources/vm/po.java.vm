@@ -1,0 +1,18 @@
+package com.testhelper.pojo;
+
+import lombok.Getter;
+import lombok.Setter;
+
+import java.util.Date;
+
+/**
+ * @Author: ${author}
+ * @Date: ${dateTime}
+ */
+@Setter
+@Getter
+public class ${entityName}Po {
+#foreach($i in $list)
+    private $i.javaType $i.columnEntityName;
+#end
+}

@@ -1,6 +1,7 @@
 package com.testhelper.repository;
 
 import com.testhelper.entity.DefectComment;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -8,7 +9,7 @@ import org.springframework.stereotype.Repository;
  * @Date: 2020/12/21 10:02
  */
 @Repository
-public interface DefectCommentRepository extends org.springframework.data.jpa.repository.JpaRepository<DefectComment, Long> {
+public interface DefectCommentRepository extends JpaRepository<DefectComment, Long> {
     /**
      * 根据ID加载实体
      * @param id
