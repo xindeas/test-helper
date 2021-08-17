@@ -1,0 +1,107 @@
+package com.testhelper.service.impl;
+
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.Projections;
+import com.querydsl.jpa.impl.JPAQuery;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.testhelper.dto.${entityName};
+import com.testhelper.entity.${entityName};
+import com.testhelper.entity.Q${entityName};
+import com.testhelper.po.PageHelperPo;
+import com.testhelper.pojo.${entityName}Po;
+import com.testhelper.repository.${entityName}Repository;
+import com.testhelper.service.${entityName}Service;
+import com.testhelper.utils.EntityUtils;
+import com.testhelper.utils.LogUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.hibernate.Session;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Date;
+
+/**
+ * @Author: ${author}
+ * @Date: ${dateTime}
+ */
+@Service("${entityName}Service")
+@Transactional(rollbackFor = Exception.class)
+public class ${entityName}ServiceImpl extends BaseServiceImpl implements ${entityName}Service {
+    @Autowired
+    private ${entityName}Repository ${lowerCamelName}Repository;
+    @Autowired
+    JPAQueryFactory queryFactory;
+
+    @Override
+    public PageHelperPo<${entityName}, ${entityName}Po> query(PageHelperPo<${entityName}, ${entityName}Po> page) {
+        if (null == page) {
+            return null;
+        }
+        Q${entityName} qClass = Q${entityName}.${lowerCamelName};
+            ${entityName}Po po = page.getFilter();
+        BooleanBuilder builder = whereCreator(po);
+        JPAQuery<${entityName}> query = queryFactory
+                .selectFrom(qClass)
+                .where(builder);
+        query = sortCreator(qClass, ${entityName}Po.class, query, page.getSorts());
+        return this.paginationQuery(query, page);
+    }
+
+    @Override
+    public ${entityName} load(Long ${primary.columnEntityName}) {
+        ${entityName} ${lowerCamelName} =
+            ${lowerCamelName}Repository.find${entityName}By${primary.upperEntityName}(${primary.columnEntityName});
+        Session session = entityManager.unwrap(Session.class);
+        session.evict(${lowerCamelName});
+        return ${lowerCamelName};
+    }
+
+    @Override
+    public ${entityName} save(${entityName} ${lowerCamelName}, String userLogin) {
+        ${entityName}
+        old = ${lowerCamelName}Repository.find${entityName}By${primary.upperEntityName}(${lowerCamelName}.get${primary.upperEntityName}())
+        ;
+
+        String msg = EntityUtils.compareEntity(old, ${lowerCamelName});
+        if (StringUtils.isNotBlank(msg)) {
+            LogUtils.log("tb_project_module", ${lowerCamelName}.get${primary.upperEntityName}(), msg, userLogin);
+        }
+        ${lowerCamelName}.setModifyBy(userLogin);
+        ${lowerCamelName}.setModifyDate(new Date());
+        return ${lowerCamelName}Repository.save(${lowerCamelName});
+    }
+
+    @Override
+    public ${entityName} add(${entityName} ${lowerCamelName}, String userLogin) {
+        ${lowerCamelName}.setCreateBy(userLogin);
+        ${lowerCamelName}.setCreateDate(new Date());
+        ${lowerCamelName}.setModifyBy(userLogin);
+        ${lowerCamelName}.setModifyDate(new Date());
+        ${entityName} p = ${lowerCamelName}Repository.save(${lowerCamelName});
+        LogUtils.log("tb_project_module", p.get${primary.upperEntityName}(), "创建一条新纪录", userLogin);
+        return p;
+    }
+
+    @Override
+    public void delete(Long ${primary.columnEntityName}) {
+            ${lowerCamelName}Repository.deleteBy${primary.upperEntityName}(${primary.columnEntityName});
+    }
+
+    private BooleanBuilder whereCreator(${entityName}Po po) {
+        BooleanBuilder builder = new BooleanBuilder();
+        if (null != po) {
+            Q${entityName} qClass = Q${entityName}.${lowerCamelName};
+            #foreach($i in $list)
+                #if($i.javaType=="String")
+                if (StringUtils.isNotBlank(po.get${i.upperEntityName}()))
+                #else
+                if (null != po.get${i.upperEntityName}())
+                #end {
+                builder.and(qClass.${i.columnEntityName}.eq(po.get${i.upperEntityName}()));
+            }
+            #end
+        }
+        return builder;
+    }
+}

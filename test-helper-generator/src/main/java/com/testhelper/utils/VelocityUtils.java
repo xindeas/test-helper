@@ -558,9 +558,11 @@ public class VelocityUtils {
         VelocityContext context = VelocityUtils.prepareContext();
 
         addToZip(zip, context, "vm/entity.java.vm", entityName + ".java");
-        addToZip(zip, context, "vm/po.java.vm", poName + ".java");
-        addToZip(zip, context, "vm/repository.java.vm", repositoryName + ".java");
-        addToZip(zip, context, "vm/component.java.vm", componentName + ".java");
+        addToZip(zip, context, "vm/po.java.vm", getEntityName(tableName) + "Po.java");
+        addToZip(zip, context, "vm/repository.java.vm", getEntityName(tableName) + "Repository.java");
+        addToZip(zip, context, "vm/component.java.vm", getEntityName(tableName) + "Component.java");
+        addToZip(zip, context, "vm/service.java.vm", getEntityName(tableName) + "Service.java");
+        addToZip(zip, context, "vm/serviceImpl.java.vm", getEntityName(tableName) + "ServiceImpl.java");
         try {
             zip.closeEntry();
         } catch (IOException e) {

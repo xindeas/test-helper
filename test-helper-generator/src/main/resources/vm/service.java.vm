@@ -1,0 +1,52 @@
+package com.testhelper.service;
+
+
+import com.testhelper.entity.${entityName};
+import com.testhelper.pojo.${entityName}Po;
+import com.testhelper.po.PageHelperPo;
+
+/**
+ * @Author: ${author}
+ * @Date: ${dateTime}
+ */
+public interface ${entityName}Service {
+
+    /**
+     * 分页查询
+     *
+     * @param page 分页参数
+     * @return
+     */
+    public PageHelperPo<${entityName}, ${entityName}Po> query(PageHelperPo<${entityName}, ${entityName}Po> page);
+
+    /**
+     * 根据ID加载实体
+     *
+     * @param id 流水号
+     * @return
+     */
+    public ${entityName} load(Long id);
+
+    /**
+     * 编辑
+     *
+     * @param ${lowerCamelName}
+     * @return
+     */
+    public ${entityName} save(${entityName} ${lowerCamelName}, String userLogin);
+
+    /**
+     * 新增
+     *
+     * @param ${lowerCamelName}
+     * @return
+     */
+    public ${entityName} add(${entityName} ${lowerCamelName}, String userLogin);
+
+    /**
+     * 删除
+     *
+     * @param id 流水号
+     */
+    public void delete(Long id);
+}
