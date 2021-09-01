@@ -102,7 +102,7 @@ CREATE TABLE IF NOT EXISTS `tb_log` (
   KEY `target_id` (`target_tb`,`target_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=66 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='操作记录';
 
--- 正在导出表  test-helper.tb_log 的数据：~8 rows (大约)
+-- 正在导出表  test-helper.tb_log 的数据：~65 rows (大约)
 /*!40000 ALTER TABLE `tb_log` DISABLE KEYS */;
 INSERT INTO `tb_log` (`id`, `target_tb`, `target_id`, `remark`, `create_by`, `create_date`) VALUES
 	(1, 'tb_project', 3, '修改了项目名称：从123修改为测试名称；', 'admin', '2020-12-16 05:47:14'),
@@ -171,6 +171,24 @@ INSERT INTO `tb_log` (`id`, `target_tb`, `target_id`, `remark`, `create_by`, `cr
 	(64, 'tb_project', 13, '修改了当前版本：从【7.0.1】修改为【7.0.2】；', 'admin', '2021-05-06 05:24:27'),
 	(65, 'tb_defect', 4, '系统管理员评论说：hhh', 'admin', '2021-05-06 05:58:04');
 /*!40000 ALTER TABLE `tb_log` ENABLE KEYS */;
+
+-- 导出  表 test-helper.tb_permission 结构
+DROP TABLE IF EXISTS `tb_permission`;
+CREATE TABLE IF NOT EXISTS `tb_permission` (
+  `id` bigint NOT NULL AUTO_INCREMENT COMMENT '流水号',
+  `parent_id` bigint NOT NULL COMMENT '父级权限ID',
+  `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '权限名',
+  `type` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '权限类别（M：菜单；B：按钮；P：页面）',
+  `create_by` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '创建人',
+  `create_date` datetime NOT NULL COMMENT '创建时间',
+  `modify_by` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '修改人',
+  `modify_date` datetime NOT NULL COMMENT '修改时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='权限';
+
+-- 正在导出表  test-helper.tb_permission 的数据：~0 rows (大约)
+/*!40000 ALTER TABLE `tb_permission` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tb_permission` ENABLE KEYS */;
 
 -- 导出  表 test-helper.tb_project 结构
 DROP TABLE IF EXISTS `tb_project`;
@@ -242,7 +260,7 @@ CREATE TABLE IF NOT EXISTS `tb_project_version` (
   KEY `project_id` (`project_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='版本记录';
 
--- 正在导出表  test-helper.tb_project_version 的数据：~0 rows (大约)
+-- 正在导出表  test-helper.tb_project_version 的数据：~12 rows (大约)
 /*!40000 ALTER TABLE `tb_project_version` DISABLE KEYS */;
 INSERT INTO `tb_project_version` (`id`, `project_id`, `version_no`, `remark`, `create_date`, `create_by`, `modify_date`, `modify_by`) VALUES
 	(3, 12, '0.0.0', '初版', '2020-12-22 02:16:00', 'admin', '2020-12-22 02:16:00', 'admin'),
@@ -277,7 +295,7 @@ CREATE TABLE IF NOT EXISTS `tb_user` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='用户表';
 
--- 正在导出表  test-helper.tb_user 的数据：~0 rows (大约)
+-- 正在导出表  test-helper.tb_user 的数据：~2 rows (大约)
 /*!40000 ALTER TABLE `tb_user` DISABLE KEYS */;
 INSERT INTO `tb_user` (`id`, `name`, `login`, `pwd`, `mobile`, `email`, `avatar`, `role`, `create_date`, `create_by`, `modify_date`, `modify_by`) VALUES
 	(1, '系统管理员', 'admin', 'YWRtaW4=', '17350952652', '', 'http://cdn.duitang.com/uploads/item/201509/29/20150929195250_5VZzL.gif', 'SYS_ADMIN', '2020-11-03 16:36:39', 'admin', '2020-11-03 16:36:44', 'admin'),
