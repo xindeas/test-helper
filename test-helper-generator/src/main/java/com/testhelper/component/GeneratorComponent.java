@@ -2,7 +2,6 @@ package com.testhelper.component;
 
 import com.testhelper.po.ResultHelperPo;
 import com.testhelper.service.impl.TableServiceImpl;
-import com.testhelper.utils.VelocityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -16,11 +15,6 @@ public class GeneratorComponent {
     @Autowired
     @Qualifier("TableService")
     private TableServiceImpl baseServiceImpl;
-
-    public ResultHelperPo createCode(String tableName) {
-        VelocityUtils.entityCreator(tableName);
-        return new ResultHelperPo(true, null, "");
-    }
 
     public ResultHelperPo getAllTable() {
         return new ResultHelperPo(true, baseServiceImpl.getAllTable(), "");

@@ -25,11 +25,6 @@ public class GeneratorController {
     @Autowired
     private GeneratorComponent generatorComponent;
 
-    @GetMapping("/create-code")
-    private ResultHelperPo createCode(String tableName) {
-        return generatorComponent.createCode(tableName);
-    }
-
     @GetMapping("/get-all-table")
     private ResultHelperPo getAllTable() {
         return generatorComponent.getAllTable();
